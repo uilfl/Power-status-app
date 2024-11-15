@@ -1,1 +1,5 @@
-streamlit == @latest 
+streamlit==1.26.0  # Adjust to the latest version if newer
+pandas>=1.5.0
+sqlalchemy>=2.0
+psycopg2-binary>=2.9  # For PostgreSQL, remove if not used
+pymysql>=1.0  # For MySQL, remove if not used
