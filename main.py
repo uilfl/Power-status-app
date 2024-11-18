@@ -7,14 +7,10 @@ def main():
     st.title("Q&A Interactive Interface")
     
     # Set up the UI header
-    st.title("Pull Response Interface")
     st.subheader("Interact with the options below to submit your response.")
 
     # Add a dropdown (select box) for choosing options
-    option = st.selectbox(
-        "Choose an option from the list:",
-        ["Option 1", "Option 2", "Option 3", "Option 4"]
-    )
+    option = st.caption("In the context of rapid globalization, with technological advancements and deepening cultural exchanges, how can organizations balance the need for localization while ensuring accuracy and effectiveness in cross-cultural communication, particularly in the areas of language translation and semantic understanding, to avoid misunderstandings or biases arising from cultural differences?")
 
     # Add a slider to adjust a numeric value
     numeric_value = st.slider(
