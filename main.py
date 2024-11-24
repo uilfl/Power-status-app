@@ -4,17 +4,15 @@ import os
 
 
 def main():
-    st.title("Experiment Procedure and Instructions")
+    st.title("Experimental Procedures and Guidelines")
     
     # Set up the UI header
-    st.subheader("Introduction to the Scenario:")
+    st.subheader("Context Introduction")
 
     # Add a dropdown (select box) for choosing options
-    option = st.caption("Dear Participant, You will be interacting online with a robot coworker from the same consulting company to make quick business decisions. Please note that you will not meet the robot in person. You will be randomly assigned to one of two roles: **Creative Worker** or **Support Worker**. Together, you will discuss and make decisions on several tasks to determine which strategies should be prioritized for the company you are assisting. After the interaction phase, we will ask you to complete a questionnaire to share your thoughts and feedback. At the end of the study, a team bonus will be provided. Therefore, we encourage you to put in your best effort during this research discussion.")
-
-    option = st.caption("The procedure for this experiment is as follows:\n"" 1. Online Decision-Making Interaction \n""2. Post-Interaction Questionnaire\n\n\n")
+    option = st.caption("Welcome, and thank you for participating in this study!")
     # Add a slider to adjust a numeric value
-    numeric_value = st.slider(
+    numeric_value = st.slider(-
         "Set a numeric value:",
         min_value=0, max_value=100, value=50
     )
