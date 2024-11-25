@@ -1,0 +1,27 @@
+-- Create User table
+CREATE TABLE User
+(
+    ID INT PRIMARY KEY,
+    Age INT
+);
+
+-- Create User_Response table
+CREATE TABLE User_Response
+(
+    fk INT,
+    Time_response CHAR(50),
+    Response INT,
+    Change BOOLEAN,
+    Changed_answer INT,
+    Change_interval_time CHAR(50),
+    group_num INT,
+    Field1 VARCHAR(255),
+    Field2 VARCHAR(255),
+    FOREIGN KEY (fk) REFERENCES User(ID)
+);
+
+-- Create Robot table
+CREATE TABLE Robot
+(
+    Response VARCHAR(255)
+);
