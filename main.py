@@ -11,6 +11,7 @@ def main():
 
     # Add a dropdown (select box) for choosing options
     option = st.caption("Welcome, and thank you for participating in this study!")
+
     # Add a slider to adjust a numeric value
     numeric_value = st.slider(-
         "Set a numeric value:",
