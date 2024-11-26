@@ -59,7 +59,8 @@ def main():
             st.warning("Please enter your experiment code before submitting.")
     else:
         st.info("Submit your response after filling in the fields.")
-
+    
+    st.subheader("Task Instructions")
     # Add a slider to adjust a numeric value
     numeric_value = st.slider(
         "Set a numeric value:",
