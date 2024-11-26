@@ -1,16 +1,17 @@
 import streamlit as st
+st.title("Task Instructions")
+st.subheader("[Advertising Investment Decision-Making]")
+st.markdown('''
+The company is planning a marketing campaign for a clothing brand and needs your help in developing an advertising strategy. Your goal is to maximize brand exposure and sales conversion rates. With a total budget of **1 million NT dollars**, you must allocate funds between **online and offline advertising channels** within the budget constraints.  
 
-st.markdown  ('''
-# Task Instruction:
+**Online Advertising:**  
+This includes social media, search engine ads, and email campaigns. It typically reaches a wide younger audience but is highly competitive and requires precise targeting strategies.  
 
-1. Import necessary libraries.
-2. Define a function `get_power_status` that checks the power status of a device.
-3. Implement the function to return the current power status (e.g., 'ON', 'OFF', 'STANDBY').
-4. Define a main function to call `get_power_status` and print the result.
-5. Ensure the script runs the main function when executed directly.
-6. Add error handling to manage potential issues (e.g., device not found, permission errors).
-
+**Offline Advertising:**  
+This includes outdoor billboards, event sponsorships, and in-store promotions. It is effective at attracting specific local target audiences but has a more limited reach and higher costs.
 ''')
+st.caption("Please carefully weigh the advantages and limitations of both options and allocate the budget percentages based on your judgment. After adjusting the slider, press the \"Confirm\" button to submit your answer.")
+
 
 def get_power_status():
     # Placeholder implementation

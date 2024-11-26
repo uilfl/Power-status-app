@@ -10,17 +10,17 @@ def main():
     st.subheader("Context Introduction")
 
     # Provide experiment details
-    st.caption("Welcome, and thank you for participating in this study!")
-    st.caption(
+    st.markdown("Welcome, and thank you for participating in this study!")
+    st.markdown(
         "You will be randomly assigned to one of two roles: **Creative Worker** or **Support Worker**. "
         "As a member of a consulting company, you will collaborate with a **Robot** colleague online to make quick business decisions together. "
         "At the end of the study, a bonus will be awarded, and one of the collaborators in the group will be responsible for distributing it. "
         "Therefore, we encourage you to put in your best effort during this interactive session."
     )
-    st.caption(
+    st.markdown(
         "After the experiment, we will ask you to complete a questionnaire. The estimated time for this is approximately ... minutes."
     )
-    st.caption("If you have any questions during the study, please raise your hand to notify the experimenter.")
+    st.markdown("If you have any questions during the study, please raise your hand to notify the experimenter.")
 
     # Add a text input for experiment code
     custom_response = st.text_input("Please enter your experiment code:")
