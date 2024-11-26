@@ -1,10 +1,7 @@
 import streamlit as st
-import sqlite3
-import os
 
 # Create the SQL connection to pets_db as specified in your secrets file.
-conn = st.connection('pets_db', type='sql')
-
+conn = st.experimental_connection('main_db', type='sql')
 # Insert some data with conn.session.
 with conn.session as s:
     s.execute('CREATE TABLE IF NOT EXISTS User (ID INT PRIMARY KEY, Age INT);')
