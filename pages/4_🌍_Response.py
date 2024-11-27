@@ -1,7 +1,12 @@
 import streamlit as st 
+from sqlalchemy import text
 import time 
+import sqlite3
 
 st.set_page_config(page_title="response", page_icon="🌍")
+conn = st.experimental_connection('main_db', type='sql')
+
+
 
 def set_query_params(page):
     if page == "Home":
@@ -26,6 +31,12 @@ def main():
     # Add a submit button
     if st.button("Submit Response"):
         st.write(f"Submitted value: {numeric_value}")
+    with conn.session as s:
+        s.execute(
+            text('INSERT INTO user_response (Response) VALUES (:response);'),
+            {'response': numeric_value}
+        )
+        s.commit()
 # Dictionary to store button click times
 button_click_times = {}
 
@@ -42,17 +53,22 @@ def on_button_click(button_name):
         time_difference = current_time - button_click_times[button_name]
         print(f"按鈕 '{button_name}' 的兩次點擊間隔: {time_difference:.3f} 秒")
         # 重置該按鈕的時間戳
-
+        # 插入數據酷
+    with conn.session as s:
+        s.execute(
+            text('INSERT INTO user_response (Response_time) VALUES (:response);'),
+            {'response': time_difference}
+        )
+        s.commit()
 
 def submitted_page():
     st.title("Thank You!")
-    conn = sqlite3.connect(db_file_path)  # File-based database connection
     st.write("You can go back to the main page or close this window.")
     main()
     # on_button_click("Submit Response")
     print("Connected to the SQLite database from 'Database/main.sql'")
 
-
+ 
 
 main()
 
