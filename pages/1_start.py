@@ -1,13 +1,11 @@
 import streamlit as st
-from sqlalchemy import text
-import sqlite3
 
 # Function for the main experiment interface
 def main():
     st.title("Experimental Procedures and Guidelines")
     st.subheader("Context Introduction")
 
-    # Context instructions
+    # Original context instructions
     st.markdown(
         """
         Welcome, and thank you for participating in this study!  
@@ -27,6 +25,7 @@ def main():
     if st.button("Submit Response"):
         if custom_response:  # Ensure input is not empty
             if custom_response == "01":
+                st.session_state["user_status"] = "high"
                 st.success(
                     "Your role is **Creative Worker**. "
                     "This role is primarily responsible for generating and managing key ideas. "
@@ -35,6 +34,7 @@ def main():
                     "**Your collaborator does not** have such control over you."
                 )
             elif custom_response == "02":
+                st.session_state["user_status"] = "high"
                 st.success(
                     "Your role is **Creative Worker**. "
                     "This role is primarily responsible for generating and managing key ideas. "
@@ -43,6 +43,7 @@ def main():
                     "**You do not** have such control over them."
                 )
             elif custom_response == "03":
+                st.session_state["user_status"] = "low"
                 st.success(
                     "Your role is **Support Worker**. "
                     "This role is mainly responsible for small tasks and record-keeping. "
@@ -51,6 +52,7 @@ def main():
                     "**Your collaborator does not** have such control over you."
                 )
             elif custom_response == "04":
+                st.session_state["user_status"] = "low"
                 st.success(
                     "Your role is **Support Worker**. "
                     "This role is mainly responsible for small tasks and record-keeping. "
@@ -60,9 +62,19 @@ def main():
                 )
             else:
                 st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
+                return
+
+            st.session_state["experiment_code"] = custom_response  # Store experiment code
+            st.session_state["current_page"] = "task"  # Move to the task page
         else:
             st.warning("Please enter your experiment code before submitting.")
-    
+
+# Main entry point
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = "main"
+
+if st.session_state["current_page"] == "main":
+    main()
 
     # Database interaction (SQLAlchemy example)
     # if st.button("Save Numeric Value"):
