@@ -83,6 +83,6 @@ if task:
 
 # 提供下一頁的按鈕（條件性顯示）
 if st.session_state["task_completed"]:
-    st.markdown("[進入下一頁](guide)")
+    st.markdown("[進入下一頁](task_show)")
 else:
     st.warning("請先完成任務才能解鎖下一頁！")

@@ -2,7 +2,6 @@ import streamlit as st
 from sqlalchemy import text
 
 conn = st.experimental_connection('main_db', type='sql')
-st.set_page_config(page_title="start", page_icon="🌍")
 
 def main():
     st.title("Experimental Procedures and Guidelines")
@@ -68,8 +67,8 @@ def main():
     )
     with conn.session as s:
         s.execute(
-            text('INSERT INTO user_response (id) VALUES (:id);'),
-            {'user_id': numeric_value}
+            text('INSERT INTO User (ID) VALUES (:ID);'),
+            {'ID': numeric_value}
         )
         s.commit()
     
