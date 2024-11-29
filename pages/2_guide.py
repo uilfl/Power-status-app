@@ -1,4 +1,6 @@
 import streamlit as st
+st.set_page_config(page_title="Guidance", page_icon="🌍")
+
 def survey_guidance():
     guidance = st.markdown("""
     Welcome to the Survey!
