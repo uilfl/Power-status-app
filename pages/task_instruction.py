@@ -195,28 +195,36 @@ def step_2():
 
     # Determine roles and images based on custom_response
     if st.session_state.custom_response == "01":
-        participant_role = "Creative Worker"
-        robot_role = "Support Worker"
+        participant_status = "Creative Worker"
+        robot_status = "Support Worker"
         participant_image = "4.png"
+        participant_power="have the authority to distribute the group bonus"
         robot_image = "1.png"
+        robot_power="do not have the authority to distribute the group bonus"
     elif st.session_state.custom_response == "02":
-        participant_role = "Creative Worker"
-        robot_role = "Support Worker"
+        participant_status = "Creative Worker"
+        robot_status = "Support Worker"
+        participant_power="do not have the authority to distribute the group bonus"
         participant_image = "4.png"
+        robot_power="have the authority to distribute the group bonus"
         robot_image = "2.png"
     elif st.session_state.custom_response == "03":
-        participant_role = "Support Worker"
-        robot_role = "Creative Worker"
+        participant_status = "Support Worker"
+        robot_status = "Creative Worker"
+        participant_power="have the authority to distribute the group bonus"
         participant_image = "3.png"
+        robot_power="do not have the authority to distribute the group bonus"
         robot_image = "1.png"
     elif st.session_state.custom_response == "04":
-        participant_role = "Support Worker"
-        robot_role = "Creative Worker"
+        participant_status = "Support Worker"
+        robot_status = "Creative Worker"
+        participant_power="do not have the authority to distribute the group bonus"
         participant_image = "3.png"
+        robot_power="have the authority to distribute the group bonus"
         robot_image = "2.png"
     else:
-        participant_role = "Unknown"
-        robot_role = "Unknown"
+        participant_status = "Unknown"
+        robot_status = "Unknown"
         participant_image = None
         robot_image = None
 
@@ -224,17 +232,17 @@ def step_2():
 
     # Robot's decision on the left
     with col1:
-        st.subheader(f"Robot: {robot_role}")
+        st.subheader(f"Robot: {robot_status}")
         if robot_image:
-            st.image(robot_image, caption="Robot Role", width=150)  # Reduced size
+            st.image(robot_image, caption=robot_power, width=150)  # Reduced size
         st.progress(robot_decision / 100)  # Robot progress bar
         st.write(f"Robot's decision for online advertising: **{robot_decision}%**")
 
     # Participant's decision on the right
     with col2:
-        st.subheader(f"You: {participant_role}")
+        st.subheader(f"You: {participant_status}")
         if participant_image:
-            st.image(participant_image, caption="Your Role", width=150)  # Reduced size
+            st.image(participant_image, caption=participant_power, width=150)  # Reduced size
         st.progress(participant_decision / 100)  # Participant progress bar
         st.write(f"Your decision for online advertising: **{participant_decision}%**")
     
@@ -251,13 +259,6 @@ def step_2():
         st.session_state.final_offline = 100 - final_value
         st.session_state.experiment_step = "questionnaire"
 
-        
-
-    # Submit button
-    if st.button("Submit Final Decision", key="final_submit"):
-        st.session_state.final_online = final_value
-        st.session_state.final_offline = 100 - final_value
-        st.session_state.experiment_step = "questionnaire"
 
 def questionnaire():
     """Questionnaire Page"""
