@@ -13,6 +13,9 @@ if "participant_decision" not in st.session_state:
 if "robot_decision" not in st.session_state:
     st.session_state.robot_decision = None
 
+if "custom_response" not in st.session_state:
+    st.session_state.custom_response = None
+
 
 def survey_guidance():
     """Initial Survey Guidance Page"""
@@ -35,7 +38,7 @@ def survey_guidance():
 
 def start():
     """Start Page: Role Assignment and Instructions"""
-    st.title("Experimental Procedures ＆ Guidelines")
+    st.title("Experimental Procedures")
     st.subheader("Context Introduction")
 
     # Context instructions
@@ -52,12 +55,12 @@ def start():
     )
 
     # Text input for experiment code
-    custom_response = st.text_input("Please enter your experiment code:")
+    st.session_state.custom_response = st.text_input("Please enter your experiment code:")
 
     # Handle experiment code submission
     if st.button("Submit Response"):
-        if custom_response:  # Ensure input is not empty
-            if custom_response == "01":
+        if st.session_state.custom_response:  # Ensure input is not empty
+            if st.session_state.custom_response == "01":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Creative Worker**. "
@@ -67,7 +70,7 @@ def start():
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
-            elif custom_response == "02":
+            elif st.session_state.custom_response == "02":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Creative Worker**. "
@@ -77,7 +80,7 @@ def start():
                     "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**You do not** have such control over them."
                 )
-            elif custom_response == "03":
+            elif st.session_state.custom_response == "03":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Support Worker**. "
@@ -87,7 +90,7 @@ def start():
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
-            elif custom_response == "04":
+            elif st.session_state.custom_response == "04":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Support Worker**. "
@@ -186,19 +189,71 @@ def processing():
 def step_2():
     """Step 2: System Guidance and Review"""
     st.title("System Review")
-    st.info("After submitting your answer, please wait for your collaborator to complete their response.")
 
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
-    st.write(f"Your decision for online advertising: **{participant_decision}%**")
-    st.write(f"Robot's decision for online advertising: **{robot_decision}%**")
+    # Determine roles and images based on custom_response
+    if st.session_state.custom_response == "01":
+        participant_role = "Creative Worker"
+        robot_role = "Support Worker"
+        participant_image = "4.png"
+        robot_image = "1.png"
+    elif st.session_state.custom_response == "02":
+        participant_role = "Creative Worker"
+        robot_role = "Support Worker"
+        participant_image = "4.png"
+        robot_image = "2.png"
+    elif st.session_state.custom_response == "03":
+        participant_role = "Support Worker"
+        robot_role = "Creative Worker"
+        participant_image = "3.png"
+        robot_image = "1.png"
+    elif st.session_state.custom_response == "04":
+        participant_role = "Support Worker"
+        robot_role = "Creative Worker"
+        participant_image = "3.png"
+        robot_image = "2.png"
+    else:
+        participant_role = "Unknown"
+        robot_role = "Unknown"
+        participant_image = None
+        robot_image = None
+
+    col1, col2 = st.columns(2)
+
+    # Robot's decision on the left
+    with col1:
+        st.subheader(f"Robot: {robot_role}")
+        if robot_image:
+            st.image(robot_image, caption="Robot Role", width=150)  # Reduced size
+        st.progress(robot_decision / 100)  # Robot progress bar
+        st.write(f"Robot's decision for online advertising: **{robot_decision}%**")
+
+    # Participant's decision on the right
+    with col2:
+        st.subheader(f"You: {participant_role}")
+        if participant_image:
+            st.image(participant_image, caption="Your Role", width=150)  # Reduced size
+        st.progress(participant_decision / 100)  # Participant progress bar
+        st.write(f"Your decision for online advertising: **{participant_decision}%**")
     
+    # Final adjustment slider
+    st.info("You can adjust the final answer or not at all!")
     final_value = st.slider(
-        "Adjust your final value for online advertising (percentage):",
+        label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
 
+    # Submit button with unique key
+    if st.button("Submit Final Decision"):
+        st.session_state.final_online = final_value
+        st.session_state.final_offline = 100 - final_value
+        st.session_state.experiment_step = "questionnaire"
+
+        
+
+    # Submit button
     if st.button("Submit Final Decision", key="final_submit"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
