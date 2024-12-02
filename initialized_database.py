@@ -1,13 +1,23 @@
 import streamlit as st
 from sqlalchemy import text
-import os
+import pyodbc
 
-# Ensure the database directory and file exist
-db_path = os.path.join("Database", "main.db")
-os.makedirs(os.path.dirname(db_path), exist_ok=True)
+secrets = st.secrets["azure_sql"]
+connection_string = (
+    f'DRIVER={{ODBC Driver 17 for SQL Server}};'
+    f'SERVER={secrets["server"]};'
+    f'DATABASE={secrets["database"]};'
+    f'UID={secrets["username"]};'
+    f'PWD={secrets["password"]};'
+    f'Encrypt=yes;'
+    f'TrustServerCertificate=no;'
+    f'Connection Timeout=30;'
+)
 
-# Create the SQL connection to main.db as defined in secrets.toml
-conn = st.experimental_connection('main_db', type='sql')
+# Connect to the database
+conn = pyodbc.connect(connection_string)
+print("Connection successful")
+
 
 # Database operations
 with conn.session as s:

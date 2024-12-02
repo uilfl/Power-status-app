@@ -1,2 +1,4 @@
 streamlit==1.26.0  # Adjust to the latest version if newer
 SQLAlchemy==2.0.21
+mysqlclient
+pyodbc

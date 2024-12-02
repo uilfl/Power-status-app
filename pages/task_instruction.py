@@ -1,4 +1,5 @@
 import streamlit as st
+from sqlalchemy import text
 import random
 import time
 
@@ -104,7 +105,14 @@ def start():
                 st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
         else:
             st.warning("Please enter your experiment code before submitting.")
-
+    # insert data to database
+    with st.experimental_connection("main_db", type="sql").session as conn:
+             conn.execute(
+                 text('INSERT INTO User (ID) VALUES (:ID);'),
+                 {'ID': st.session_state.custom_response}
+             )
+             conn.commit()
+             st.success("Numeric value saved successfully.")
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
@@ -192,7 +200,21 @@ def step_2():
 
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
-
+    # insert data to database, robot and user response
+    with st.experimental_connection("main_db", type="sql").session as conn:
+             conn.execute(
+                 text('INSERT INTO User_response (ID) Response (:ID);'),
+                 {'ID': st.session_state.participant_decision}
+             )
+             conn.commit()
+             st.success("Numeric value saved successfully.")
+    with st.experimental_connection("main_db", type="sql").session as conn:
+             conn.execute(
+                 text('INSERT INTO Robot (ID) Response (:ID);'),
+                 {'ID': st.session_state.robot_decision}
+             )
+             conn.commit()
+             st.success("Numeric value saved successfully.")
     # Determine roles and images based on custom_response
     if st.session_state.custom_response == "01":
         participant_status = "Creative Worker"
@@ -248,11 +270,29 @@ def step_2():
     
     # Final adjustment slider
     st.info("You can adjust the final answer or not at all!")
+    
+    start_time = time.time()
     final_value = st.slider(
         label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
-
+    end_time = time.time()
+    time_interval = end_time - start_time
+    # calculate the time interval on change the slider
+    with st.experimental_connection("main_db", type="sql").session as conn:
+             conn.execute(
+                 text('INSERT INTO User_response (ID) Change_interval_time (:ID);'),
+                 {'ID': time_interval}
+             )
+             conn.commit()
+             st.success("Numeric value saved successfully")
+    with st.experimental_connection("main_db", type="sql").session as conn:
+             conn.execute(
+                 text('INSERT INTO User_response (ID) Changed_answer (:ID);'),
+                 {'ID': time_interval}
+             )
+             conn.commit()
+             st.success("Numeric value saved successfully")
     # Submit button with unique key
     if st.button("Submit Final Decision"):
         st.session_state.final_online = final_value
