@@ -8,12 +8,11 @@ st.set_page_config(page_title="Survey & Experiment", page_icon="📊")
 # Initialize session state
 if "experiment_step" not in st.session_state:
     st.session_state.experiment_step = "guide"
-if "low_status_online" not in st.session_state:
-    st.session_state.low_status_online = None
-if "high_status_online" not in st.session_state:
-    st.session_state.high_status_online = None
-if "confirmed" not in st.session_state:
-    st.session_state.confirmed = False
+if "participant_decision" not in st.session_state:
+    st.session_state.participant_decision = None
+if "robot_decision" not in st.session_state:
+    st.session_state.robot_decision = None
+
 
 def survey_guidance():
     """Initial Survey Guidance Page"""
@@ -64,6 +63,7 @@ def start():
                     "Your role is **Creative Worker**. "
                     "This role is primarily responsible for generating and managing key ideas. "
                     "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
+
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
@@ -73,6 +73,7 @@ def start():
                     "Your role is **Creative Worker**. "
                     "This role is primarily responsible for generating and managing key ideas. "
                     "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
+
                     "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**You do not** have such control over them."
                 )
@@ -82,6 +83,7 @@ def start():
                     "Your role is **Support Worker**. "
                     "This role is mainly responsible for small tasks and record-keeping. "
                     "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
+
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
@@ -91,6 +93,7 @@ def start():
                     "Your role is **Support Worker**. "
                     "This role is mainly responsible for small tasks and record-keeping. "
                     "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
+
                     "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**You do not** have such control over them."
                 )
@@ -153,14 +156,16 @@ def step_1():
     )
     
     if st.button("Confirm", key="confirm_button"):
-        st.session_state.low_status_online = max(0, min(100, numeric_value + random.randint(-17, 17)))
-        st.session_state.high_status_online = max(0, min(100, numeric_value + random.randint(-17, 17)))
-        st.session_state.low_status_offline = 100 - st.session_state.low_status_online
-        st.session_state.high_status_offline = 100 - st.session_state.high_status_online
-        st.session_state.initial_online_avg = (
-            st.session_state.low_status_online + st.session_state.high_status_online
-        ) // 2
-        st.session_state.initial_offline_avg = 100 - st.session_state.initial_online_avg
+        st.session_state.participant_decision = numeric_value
+        
+        # Robot decision: adjust based on boundary conditions
+        if numeric_value - 17 < 0:
+            st.session_state.robot_decision = max(0, min(100, numeric_value + 27))
+        elif numeric_value + 17 > 100:
+            st.session_state.robot_decision = max(0, min(100, numeric_value - 27))
+        else:
+            st.session_state.robot_decision = max(0, min(100, numeric_value - 27)) 
+        
         st.session_state.experiment_step = "processing"
 
 def processing():
@@ -182,15 +187,18 @@ def step_2():
     """Step 2: System Guidance and Review"""
     st.title("System Review")
     st.info("After submitting your answer, please wait for your collaborator to complete their response.")
-    
-    st.write(f"Low-status participant: {st.session_state.low_status_online}% online, {st.session_state.low_status_offline}% offline.")
-    st.write(f"High-status participant: {st.session_state.high_status_online}% online, {st.session_state.high_status_offline}% offline.")
-    st.write(f"The average decision is {st.session_state.initial_online_avg}% online and {st.session_state.initial_offline_avg}% offline.")
+
+    participant_decision = st.session_state.participant_decision
+    robot_decision = st.session_state.robot_decision
+
+    st.write(f"Your decision for online advertising: **{participant_decision}%**")
+    st.write(f"Robot's decision for online advertising: **{robot_decision}%**")
     
     final_value = st.slider(
         "Adjust your final value for online advertising (percentage):",
-        min_value=0, max_value=100, value=st.session_state.initial_online_avg, key="final_slider"
+        min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
+
     if st.button("Submit Final Decision", key="final_submit"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
