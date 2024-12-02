@@ -17,7 +17,7 @@ if "confirmed" not in st.session_state:
 
 def survey_guidance():
     """Initial Survey Guidance Page"""
-    st.title("Welcome to the Survey!")
+    st.title("Welcome!")
     st.markdown("""
     We appreciate your participation in this survey. Here are a few things to keep in mind before you begin:
 
@@ -25,7 +25,6 @@ def survey_guidance():
     2. **Voluntary Participation**: Your participation is completely voluntary. You may choose to skip any question or withdraw from the survey at any time.
     3. **Time Commitment**: The survey should take approximately 10-15 minutes to complete.
     4. **Honesty**: Please answer the questions as honestly as possible. There are no right or wrong answers.
-    5. **Contact Information**: If you have any questions or concerns about the survey, please contact us at [your contact information].
 
     Thank you for your time and participation!
                 
