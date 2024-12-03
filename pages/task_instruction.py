@@ -56,6 +56,26 @@ def start():
 
     # Text input for experiment code
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
+    # insert data to database
+    if 'custom_response' in st.session_state.custom_response is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User] (ID) VALUES (?);",
+                (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
 
     # Handle experiment code submission
     if st.button("Submit Response"):
@@ -104,26 +124,8 @@ def start():
                 st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
         else:
             st.warning("Please enter your experiment code before submitting.")
-    # insert data to database
-    if 'custom_response' in st.session_state and st.session_state.custom_response is not None:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User] (ID) VALUES (?);",
-                (st.session_state.custom_response,)
-            )
-            conn.commit()
-            st.success("Numeric value saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
+  
+   
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
