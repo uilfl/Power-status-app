@@ -41,7 +41,6 @@ try:
                 Changed_answer Boolean,
                 Change_interval_time CHAR(50),
                 group_num INT,
-                FOREIGN KEY (fk) REFERENCES [User](ID)
             );
         END;
     ''')
