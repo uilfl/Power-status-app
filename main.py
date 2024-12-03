@@ -12,7 +12,7 @@ if st.session_state["current_page"] == "hello":
     from Hello import main as hello_page
     hello_page()
 elif st.session_state["current_page"] == "start":
-    from pages.start import main as start_page
+    from test_files.start import main as start_page
     start_page()
 elif st.session_state["current_page"] == "task_instruction":
     from pages.task_instruction import task_instruction as task_instruction_page

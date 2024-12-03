@@ -1,7 +1,6 @@
 import streamlit as st
-from sqlalchemy import text
-import random
 import time
+from initialized_database import get_connection 
 
 # Set page configuration as the first Streamlit command
 st.set_page_config(page_title="Survey & Experiment", page_icon="📊")
@@ -106,13 +105,25 @@ def start():
         else:
             st.warning("Please enter your experiment code before submitting.")
     # insert data to database
-    with st.experimental_connection("main_db", type="sql").session as conn:
-             conn.execute(
-                 text('INSERT INTO User (ID) VALUES (:ID);'),
-                 {'ID': st.session_state.custom_response}
-             )
-             conn.commit()
-             st.success("Numeric value saved successfully.")
+    if 'custom_response' in st.session_state and st.session_state.custom_response is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User] (ID) VALUES (?);",
+                (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
@@ -201,20 +212,35 @@ def step_2():
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
     # insert data to database, robot and user response
-    with st.experimental_connection("main_db", type="sql").session as conn:
-             conn.execute(
-                 text('INSERT INTO User_response (ID) Response (:ID);'),
-                 {'ID': st.session_state.participant_decision}
-             )
-             conn.commit()
-             st.success("Numeric value saved successfully.")
-    with st.experimental_connection("main_db", type="sql").session as conn:
-             conn.execute(
-                 text('INSERT INTO Robot (ID) Response (:ID);'),
-                 {'ID': st.session_state.robot_decision}
-             )
-             conn.commit()
-             st.success("Numeric value saved successfully.")
+    if 'participant_decision' in st.session_state and 'robot_decision' in st.session_state:
+        if st.session_state.participant_decision is not None and st.session_state.robot_decision is not None:
+            try:
+                conn = get_connection()
+                cursor = conn.cursor()
+
+                # Insert participant decision into User_response table
+                cursor.execute(
+                    "INSERT INTO User_response (Response) VALUES (?);",
+                    (st.session_state.participant_decision,)
+                )
+                conn.commit()
+                st.success("Participant decision saved successfully!")
+
+                # Insert robot decision into Robot table
+                cursor.execute(
+                    "INSERT INTO Robot (Response) VALUES (?);",
+                    (st.session_state.robot_decision,)
+                )
+                conn.commit()
+                st.success("Robot decision saved successfully!")
+
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+
+            finally:
+                cursor.close()
+                conn.close()
+         
     # Determine roles and images based on custom_response
     if st.session_state.custom_response == "01":
         participant_status = "Creative Worker"
@@ -278,21 +304,51 @@ def step_2():
     )
     end_time = time.time()
     time_interval = end_time - start_time
+    # check whether the user change the answer
+    answer_change = False
+    if final_value == participant_decision:
+        answer_change = False
+    else:
+        answer_change = True
+
+    if answer_change:  # Fix the condition syntax
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the answer change into the User_response table
+            cursor.execute(
+                "INSERT INTO User_response (Changed_answer) VALUES (?);",
+                (answer_change,)  # Use 1 to indicate True in the database
+            )
+            conn.commit()
+            st.success("Answer change saved successfully!")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+        finally:
+            cursor.close()
+            conn.close()
     # calculate the time interval on change the slider
-    with st.experimental_connection("main_db", type="sql").session as conn:
-             conn.execute(
-                 text('INSERT INTO User_response (ID) Change_interval_time (:ID);'),
-                 {'ID': time_interval}
-             )
-             conn.commit()
-             st.success("Numeric value saved successfully")
-    with st.experimental_connection("main_db", type="sql").session as conn:
-             conn.execute(
-                 text('INSERT INTO User_response (ID) Changed_answer (:ID);'),
-                 {'ID': time_interval}
-             )
-             conn.commit()
-             st.success("Numeric value saved successfully")
+    if time_interval >0:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the time_interval into the User_response table
+            cursor.execute(
+                "INSERT INTO User_response (Change_interval_time) VALUES (?);",
+                (time_interval,)
+            )
+            conn.commit()
+            st.success("Time interval saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
+
     # Submit button with unique key
     if st.button("Submit Final Decision"):
         st.session_state.final_online = final_value

@@ -1,22 +1,21 @@
 import streamlit as st
 import pyodbc
 
-secrets = st.secrets["azure_sql"]
-connection_string = (
-    f'DRIVER={{ODBC Driver 17 for SQL Server}};'
-    f'SERVER={secrets["server"]};'
-    f'DATABASE={secrets["database"]};'
-    f'UID={secrets["username"]};'
-    f'PWD={secrets["password"]};'
-    f'Encrypt=yes;'
-    f'TrustServerCertificate=no;'
-    f'Connection Timeout=30;'
-)
+def get_connection():
+    secrets = st.secrets["azure_sql"]
+    connection_string = (
+        f'DRIVER={{ODBC Driver 17 for SQL Server}};'
+        f'SERVER={secrets["server"]};'
+        f'DATABASE={secrets["database"]};'
+        f'UID={secrets["username"]};'
+        f'PWD={secrets["password"]};'
+        f'Encrypt=yes;'
+        f'TrustServerCertificate=no;'
+        f'Connection Timeout=30;'
+    )   # Connect to the database
+    return pyodbc.connect(connection_string), print("Connection successful")
 
-# Connect to the database
-conn = pyodbc.connect(connection_string)
-print("Connection successful")
-
+conn = get_connection()
 cursor = conn.cursor()
 
 try:
