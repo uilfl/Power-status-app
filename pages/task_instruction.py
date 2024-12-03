@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-from initialized_database import get_connection 
+from utils.initialized_database import get_connection 
 
 # Set page configuration as the first Streamlit command
 st.set_page_config(page_title="Survey & Experiment", page_icon="📊")
