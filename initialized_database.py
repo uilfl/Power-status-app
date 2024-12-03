@@ -13,10 +13,11 @@ def get_connection():
         f'TrustServerCertificate=no;'
         f'Connection Timeout=30;'
     )   # Connect to the database
-    return pyodbc.connect(connection_string), print("Connection successful")
+    return pyodbc.connect(connection_string)
 
 conn = get_connection()
 cursor = conn.cursor()
+print("Connected to the database!")
 
 try:
     cursor.execute('''
