@@ -1,5 +1,4 @@
 import streamlit as st
-from sqlalchemy import text
 import pyodbc
 
 secrets = st.secrets["azure_sql"]
@@ -18,43 +17,52 @@ connection_string = (
 conn = pyodbc.connect(connection_string)
 print("Connection successful")
 
+cursor = conn.cursor()
 
-# Database operations
-with conn.session as s:
-    # Create tables
-    s.execute(text('''
-        CREATE TABLE IF NOT EXISTS User (
-            ID INT PRIMARY KEY,
-            Age INT
-        );
-    '''))
-    s.execute(text('''
-        CREATE TABLE IF NOT EXISTS User_Response (
-            fk INT,
-            Time_response CHAR(50),
-            Response INT,
-            Change BOOLEAN,
-            Changed_answer INT,
-            Change_interval_time CHAR(50),
-            group_num INT,
-            Field1 VARCHAR(255),
-            Field2 VARCHAR(255),
-            FOREIGN KEY (fk) REFERENCES User(ID)
-        );
-    '''))
-    s.execute(text('''
-        CREATE TABLE IF NOT EXISTS Robot (
-            Response VARCHAR(255)
-        );
-    '''))
+try:
+    cursor.execute('''
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'User' AND xtype = 'U')
+        BEGIN
+            CREATE TABLE [User] (
+                ID INT PRIMARY KEY,
+                Age INT
+            );
+        END;
+    ''')
 
-    # Insert data
-    users = [(1, 25), (2, 30), (3, 22)]
-    for user in users:
-        s.execute(text('INSERT INTO User (ID, Age) VALUES (:id, :age);'), {'id': user[0], 'age': user[1]})
+    cursor.execute('''
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'User_Response' AND xtype = 'U')
+        BEGIN
+            CREATE TABLE User_Response (
+                fk INT,
+                Time_response CHAR(50),
+                Response INT,
+                Change BIT,
+                Changed_answer INT,
+                Change_interval_time CHAR(50),
+                group_num INT,
+                Field1 VARCHAR(255),
+                Field2 VARCHAR(255),
+                FOREIGN KEY (fk) REFERENCES [User](ID)
+            );
+        END;
+    ''')
 
-    s.commit()
+    cursor.execute('''
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'Robot' AND xtype = 'U')
+        BEGIN
+            CREATE TABLE Robot (
+                Response VARCHAR(255)
+            );
+        END;
+    ''')
 
-# Query and display the data
-users_data = conn.query("SELECT * FROM User;")
-st.dataframe(users_data)
+    conn.commit()
+    print("Tables created successfully!")
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+finally:
+    cursor.close()
+    conn.close()
