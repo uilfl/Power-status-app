@@ -34,15 +34,13 @@ try:
         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'User_Response' AND xtype = 'U')
         BEGIN
             CREATE TABLE User_Response (
-                fk INT,
+                ID INT,
                 Time_response CHAR(50),
                 Response INT,
                 Change BIT,
-                Changed_answer INT,
+                Changed_answer Boolean,
                 Change_interval_time CHAR(50),
                 group_num INT,
-                Field1 VARCHAR(255),
-                Field2 VARCHAR(255),
                 FOREIGN KEY (fk) REFERENCES [User](ID)
             );
         END;
