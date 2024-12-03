@@ -1,4 +1,2 @@
-Streamlit==1.26.0  # Adjust to the latest version if newer
-SQLAlchemy==2.0.21
+Streamlit  # Adjust to the latest version if newer
 pyodbc
-pip == 24.3.1
