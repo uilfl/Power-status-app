@@ -31,8 +31,6 @@ def survey_guidance():
     4. **Honesty**: Please answer the questions as honestly as possible. There are no right or wrong answers.
 
     Thank you for your time and participation!
-                
-    **Also, because of technical issues, so please help us by clicking twice on each button.**
     """)
     
     # if st.button("Proceed to the Experiment Instructions"):
