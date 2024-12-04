@@ -416,7 +416,7 @@ elif st.session_state.experiment_step == "step1":
         finally:
             cursor.close()
             conn.close()
-elif st.session_state.experiment_step == 2:
+elif st.session_state.experiment_step == "step2":
     step_2()
 elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
