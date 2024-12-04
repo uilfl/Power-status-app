@@ -205,7 +205,7 @@ def step_1():
 
             # Insert the data into the User table
             cursor.execute(
-                "INSERT INTO [User_response] (response_answer) VALUES (?);",
+                "INSERT INTO [User_Response] (response_answer) VALUES (?);",
                 (numeric_value,)
             )
             conn.commit()
@@ -222,7 +222,7 @@ def step_1():
 
             # Insert the time_interval into the User_response table
             cursor.execute(
-                "INSERT INTO User_response (Change_interval_time) VALUES (?);",
+                "INSERT INTO User_Response (Change_interval_time) VALUES (?);",
                 (time_interval,)
             )
             conn.commit()
@@ -282,7 +282,7 @@ def step_2():
 
                 # Insert participant decision into User_response table
                 cursor.execute(
-                    "INSERT INTO User_response (response_answer) VALUES (?);",
+                    "INSERT INTO User_Response (response_answer) VALUES (?);",
                     (st.session_state.participant_decision,)
                 )
                 conn.commit()
@@ -290,7 +290,7 @@ def step_2():
 
                 # Insert robot decision into Robot table
                 cursor.execute(
-                    "INSERT INTO User_response (robot_answer) VALUES (?);",
+                    "INSERT INTO User_Response (robot_answer) VALUES (?);",
                     (st.session_state.robot_decision,)
                 )
                 conn.commit()
@@ -379,7 +379,7 @@ def step_2():
 
             # Insert the answer change into the User_response table
             cursor.execute(
-                "INSERT INTO User_response (changed_answer) VALUES (?);",
+                "INSERT INTO User_Response (changed_answer) VALUES (?);",
                 (answer_change,)  # Use 1 to indicate True in the database
             )
             conn.commit()
@@ -397,7 +397,7 @@ def step_2():
 
             # Insert the time_interval into the User_response table
             cursor.execute(
-                "INSERT INTO User_response (Change_interval_time) VALUES (?);",
+                "INSERT INTO User_Response (Change_interval_time) VALUES (?);",
                 (time_interval,)
             )
             conn.commit()
