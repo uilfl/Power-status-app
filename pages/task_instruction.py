@@ -204,7 +204,6 @@ def step_2():
     """Step 2: System Guidance and Review"""
     st.title("System Review")
     
-    # 初始化加载状态
     if "loading_complete" not in st.session_state:
         st.session_state.loading_complete = False
 
