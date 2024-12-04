@@ -257,14 +257,14 @@ def step_2():
         participant_status = "Creative Worker"
         robot_status = "Support Worker"
         participant_power="do not have the authority to distribute the group bonus"
-        participant_image = "4.png"
+        participant_image = "3.png"
         robot_power="have the authority to distribute the group bonus"
         robot_image = "2.png"
     elif st.session_state.custom_response == "03":
         participant_status = "Support Worker"
         robot_status = "Creative Worker"
         participant_power="have the authority to distribute the group bonus"
-        participant_image = "3.png"
+        participant_image = "4.png"
         robot_power="do not have the authority to distribute the group bonus"
         robot_image = "1.png"
     elif st.session_state.custom_response == "04":
