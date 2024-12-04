@@ -57,8 +57,8 @@ def start():
     )
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
-    # Text input for experiment code
-    st.session_state.custom_response = st.text_input("Please enter your experiment code:")
+    # Text input for experiment code assigned as int 
+    st.session_state.custom_response = int(st.text_input("Please enter your experiment code:"))
     
     if st.session_state.custom_response is not None:
         try:
@@ -71,7 +71,7 @@ def start():
                 (st.session_state.custom_response,)
             )
             conn.commit()
-            st.success("Numeric value saved successfully!")
+           
         except Exception as e:
             st.error(f"An error occurred: {e}")
         finally:
@@ -88,7 +88,7 @@ def start():
                 (st.session_state.custom_name,)
             )
             conn.commit()
-            st.success("Numeric value saved successfully!")
+            
         except Exception as e:
             st.error(f"An error occurred: {e}")
         finally:
@@ -191,10 +191,10 @@ def step_1():
     """)
     
     start_time = time.time()
-    numeric_value = st.slider(
+    numeric_value = int(st.slider(
         "Set a percentage for online advertising (percentage):",
         min_value=0, max_value=100, value=50, key="decision_slider"
-    )
+    ))
     end_time = time.time()
     time_interval = end_time - start_time
 
@@ -209,7 +209,7 @@ def step_1():
                 (numeric_value,)
             )
             conn.commit()
-            st.success("Numeric value saved successfully!")
+            
         except Exception as e:
             st.error(f"An error occurred: {e}")
         finally:
@@ -226,7 +226,6 @@ def step_1():
                 (time_interval,)
             )
             conn.commit()
-            # st.success("Time interval saved successfully!")
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
