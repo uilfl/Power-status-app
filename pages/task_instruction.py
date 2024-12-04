@@ -67,7 +67,7 @@ def start():
 
             # Insert the data into the User table
             cursor.execute(
-                "INSERT INTO [User_response] (group_num) VALUES (?);",
+                "INSERT INTO [User_response] (group_id) VALUES (?);",
                 (st.session_state.custom_response,)
             )
             conn.commit()
