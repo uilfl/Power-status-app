@@ -208,7 +208,6 @@ def step_2():
     if "loading_complete" not in st.session_state:
         st.session_state.loading_complete = False
 
-    # 显示加载动画，仅在页面首次加载时运行
     if not st.session_state.loading_complete:
         st.write("Please wait for Robot...")
         with st.spinner("Please be patient and give us some time."):
