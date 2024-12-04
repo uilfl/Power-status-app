@@ -59,34 +59,11 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-<<<<<<< HEAD
     
-=======
-   
-    # insert data to database
->>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
     if 'custom_response' in st.session_state.custom_response is not None:
         try:
             conn = get_connection()
             cursor = conn.cursor()
-<<<<<<< HEAD
-=======
-
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User] (ID) VALUES (?);",
-                (st.session_state.custom_response,)
-            )
-            conn.commit()
-            st.success("Numeric value saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
->>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
 
             # Insert the data into the User table
             cursor.execute(
@@ -418,33 +395,10 @@ elif st.session_state.experiment_step == "start":
     start()
 elif st.session_state.experiment_step == "step1":
     step_1()
-<<<<<<< HEAD
    
 elif st.session_state.experiment_step == "processing":
     processing()
 elif st.session_state.experiment_step == 2:
-=======
-    if 'custom_response' in st.session_state.custom_response is not None:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User] (ID) VALUES (?);",
-                (st.session_state.custom_response,)
-            )
-            conn.commit()
-            st.success("Numeric value saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
-elif st.session_state.experiment_step == "step2":
->>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
     step_2()
 elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
