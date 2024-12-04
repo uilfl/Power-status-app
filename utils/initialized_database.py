@@ -20,41 +20,6 @@ cursor = conn.cursor()
 print("Connected to the database!")
 
 try:
-    cursor.execute('''
-        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'User' AND xtype = 'U')
-        BEGIN
-            CREATE TABLE [User] (
-                ID INT PRIMARY KEY,
-                Age INT
-            );
-        END;
-    ''')
-
-    cursor.execute('''
-        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'User_Response' AND xtype = 'U')
-        BEGIN
-            CREATE TABLE User_Response (
-                ID INT,
-                Time_response CHAR(50),
-                Response INT,
-                Change BIT,
-                Changed_answer Boolean,
-                Change_interval_time CHAR(50),
-                group_num INT,
-            );
-        END;
-    ''')
-
-    cursor.execute('''
-        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'Robot' AND xtype = 'U')
-        BEGIN
-            CREATE TABLE Robot (
-                Response VARCHAR(255)
-            );
-        END;
-    ''')
-
-    conn.commit()
     print("Tables created successfully!")
 
 except Exception as e:
