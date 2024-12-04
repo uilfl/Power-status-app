@@ -393,8 +393,6 @@ elif st.session_state.experiment_step == "start":
     start()
 elif st.session_state.experiment_step == "step1":
     step_1()
-elif st.session_state.experiment_step == "processing":
-    processing()
 elif st.session_state.experiment_step == 2:
     step_2()
 elif st.session_state.experiment_step == "questionnaire":
