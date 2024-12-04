@@ -60,7 +60,7 @@ def start():
     # Text input for experiment code
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
     
-    if 'custom_response' in st.session_state.custom_response is not None:
+    if st.session_state.custom_response is not None:
         try:
             conn = get_connection()
             cursor = conn.cursor()
@@ -77,7 +77,7 @@ def start():
         finally:
             cursor.close()
             conn.close()
-    if 'custom_name' in st.session_state.custom_name is not None:
+    if st.session_state.custom_name is not None:
         try:
             conn = get_connection()
             cursor = conn.cursor()
