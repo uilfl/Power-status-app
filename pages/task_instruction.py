@@ -56,26 +56,7 @@ def start():
 
     # Text input for experiment code
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    # insert data to database
-    if 'custom_response' in st.session_state.custom_response is not None:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User] (ID) VALUES (?);",
-                (st.session_state.custom_response,)
-            )
-            conn.commit()
-            st.success("Numeric value saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
+    
 
     # Handle experiment code submission
     if st.button("Submit Response"):
@@ -213,35 +194,7 @@ def step_2():
 
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
-    # insert data to database, robot and user response
-    if 'participant_decision' in st.session_state and 'robot_decision' in st.session_state:
-        if st.session_state.participant_decision is not None and st.session_state.robot_decision is not None:
-            try:
-                conn = get_connection()
-                cursor = conn.cursor()
-
-                # Insert participant decision into User_response table
-                cursor.execute(
-                    "INSERT INTO User_response (Response) VALUES (?);",
-                    (st.session_state.participant_decision,)
-                )
-                conn.commit()
-                st.success("Participant decision saved successfully!")
-
-                # Insert robot decision into Robot table
-                cursor.execute(
-                    "INSERT INTO Robot (Response) VALUES (?);",
-                    (st.session_state.robot_decision,)
-                )
-                conn.commit()
-                st.success("Robot decision saved successfully!")
-
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-
-            finally:
-                cursor.close()
-                conn.close()
+    
          
     # Determine roles and images based on custom_response
     if st.session_state.custom_response == "01":
@@ -388,10 +341,58 @@ elif st.session_state.experiment_step == 0:
     start()
 elif st.session_state.experiment_step == 1:
     step_1()
+    if 'custom_response' in st.session_state.custom_response is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User] (ID) VALUES (?);",
+                (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
 elif st.session_state.experiment_step == "processing":
     processing()
 elif st.session_state.experiment_step == 2:
     step_2()
+    # insert data to database, robot and user response
+    if 'participant_decision' in st.session_state and 'robot_decision' in st.session_state:
+        if st.session_state.participant_decision is not None and st.session_state.robot_decision is not None:
+            try:
+                conn = get_connection()
+                cursor = conn.cursor()
+
+                # Insert participant decision into User_response table
+                cursor.execute(
+                    "INSERT INTO User_response (Response) VALUES (?);",
+                    (st.session_state.participant_decision,)
+                )
+                conn.commit()
+                st.success("Participant decision saved successfully!")
+
+                # Insert robot decision into Robot table
+                cursor.execute(
+                    "INSERT INTO Robot (Response) VALUES (?);",
+                    (st.session_state.robot_decision,)
+                )
+                conn.commit()
+                st.success("Robot decision saved successfully!")
+
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+
+            finally:
+                cursor.close()
+                conn.close()
 elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
