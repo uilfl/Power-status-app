@@ -381,7 +381,7 @@ def questionnaire():
     st.button("Finish Questionnaire", key="go_post_experiment", on_click=lambda: st.session_state.update(experiment_step="post_experiment"), type="primary")
 
 def post_experiment_page():
-    """Post-Experiment Instructions"""
+    """Post-Experiment Instruction"""
     st.title("Post-Experiment Instructions")
     st.markdown("""
     Thank you for completing this experiment!\n  
