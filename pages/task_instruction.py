@@ -12,9 +12,11 @@ if "participant_decision" not in st.session_state:
     st.session_state.participant_decision = None
 if "robot_decision" not in st.session_state:
     st.session_state.robot_decision = None
-
+if "custom_name" not in st.session_state:
+    st.session_state.custom_name = None
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
+
 
 
 def survey_guidance():
@@ -29,12 +31,12 @@ def survey_guidance():
     4. **Honesty**: Please answer the questions as honestly as possible. There are no right or wrong answers.
 
     Thank you for your time and participation!
-                
-    **Also, because of technical issues, so please help us by clicking twice on each button.**
     """)
     
-    if st.button("Proceed to the Experiment Instructions"):
-        st.session_state.experiment_step = 0  # Proceed to the next step
+    # if st.button("Proceed to the Experiment Instructions"):
+        # st.session_state.experiment_step = "start"  # Proceed to the next step
+    st.button("Proceed to the Experiment Instructions", key="start", on_click=lambda: st.session_state.update(experiment_step="start"), type="primary")
+
 
 def start():
     """Start Page: Role Assignment and Instructions"""
@@ -53,14 +55,38 @@ def start():
         If you have any questions during the study, please raise your hand to notify the experimenter.
         """
     )
-
+     # Text input for experiment name
+    st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
+<<<<<<< HEAD
     
+=======
+   
+    # insert data to database
+>>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
     if 'custom_response' in st.session_state.custom_response is not None:
         try:
             conn = get_connection()
             cursor = conn.cursor()
+<<<<<<< HEAD
+=======
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User] (ID) VALUES (?);",
+                (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
+>>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
 
             # Insert the data into the User table
             cursor.execute(
@@ -77,7 +103,7 @@ def start():
             cursor.close()
             conn.close()
     # Handle experiment code submission
-    if st.button("Submit Response"):
+    if st.button("Submit Response", type="primary"):
         if st.session_state.custom_response:  # Ensure input is not empty
             if st.session_state.custom_response == "01":
                 st.session_state["role_assigned"] = True
@@ -141,8 +167,7 @@ def start():
         st.session_state["confirmation"] = confirmation
 
         # Add Next Page button to proceed
-        if st.button("Next Page"):
-                st.session_state.experiment_step = 1
+        st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
 
 def step_1():
     """Step 1: Initial Decision"""
@@ -178,42 +203,45 @@ def step_1():
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
     
-    if st.button("Confirm", key="confirm_button"):
+    def confirm_logic():
         st.session_state.participant_decision = numeric_value
-        
+
         # Robot decision: adjust based on boundary conditions
-        if numeric_value - 17 < 0:
+        if numeric_value - 27 <= 0:
             st.session_state.robot_decision = max(0, min(100, numeric_value + 27))
-        elif numeric_value + 17 > 100:
+        elif numeric_value + 27 >= 100:
             st.session_state.robot_decision = max(0, min(100, numeric_value - 27))
         else:
-            st.session_state.robot_decision = max(0, min(100, numeric_value - 27)) 
-        
-        st.session_state.experiment_step = "processing"
+            st.session_state.robot_decision = max(0, min(100, numeric_value - 27))
 
-def processing():
-    """Processing Step"""
-    st.title("Waiting for Robot")
-    
-    with st.spinner("Please wait..."):
-        progress_bar = st.progress(0)
-        for i in range(100):
-            progress_bar.progress(i + 1)
-            time.sleep(0.05)
-    
-    st.success("Task completed successfully!")
-    
-    if st.button("Next Step"):
-        st.session_state.experiment_step = 2
+        # 更新狀態
+        st.session_state.experiment_step = "step2"
 
+    # 按鈕與邏輯綁定
+    st.button("Confirm", key="confirm_button", on_click=confirm_logic, type="primary")
+
+       
 def step_2():
     """Step 2: System Guidance and Review"""
     st.title("System Review")
+    
+    if "loading_complete" not in st.session_state:
+        st.session_state.loading_complete = False
+
+    if not st.session_state.loading_complete:
+        st.write("Please wait for Robot...")
+        with st.spinner("Please be patient and give us some time."):
+            progress_bar = st.progress(0)
+            for i in range(100):
+                progress_bar.progress(i + 1)
+                time.sleep(0.05)
+        st.session_state.loading_complete = True  # 加载完成后更新状态
 
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
+
     
-         # insert data to database, robot and user response
+    # insert data to database, robot and user response
     if 'participant_decision' in st.session_state and 'robot_decision' in st.session_state:
         if st.session_state.participant_decision is not None and st.session_state.robot_decision is not None:
             try:
@@ -226,7 +254,7 @@ def step_2():
                     (st.session_state.participant_decision,)
                 )
                 conn.commit()
-                st.success("Participant decision saved successfully!")
+                # st.success("Participant decision saved successfully!")
 
                 # Insert robot decision into Robot table
                 cursor.execute(
@@ -234,7 +262,7 @@ def step_2():
                     (st.session_state.robot_decision,)
                 )
                 conn.commit()
-                st.success("Robot decision saved successfully!")
+                # st.success("Robot decision saved successfully!")
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")
@@ -296,7 +324,7 @@ def step_2():
         st.write(f"Your decision for online advertising: **{participant_decision}%**")
     
     # Final adjustment slider
-    st.info("You can adjust the final answer or not at all!")
+    st.info("You can adjust the final answer, or not adjust it at all! But you will eventually see each other's average answers.")
     
     start_time = time.time()
     final_value = st.slider(
@@ -341,7 +369,7 @@ def step_2():
                 (time_interval,)
             )
             conn.commit()
-            st.success("Time interval saved successfully!")
+            # st.success("Time interval saved successfully!")
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
@@ -351,15 +379,19 @@ def step_2():
             conn.close()
 
     # Submit button with unique key
-    if st.button("Submit Final Decision"):
+    if st.button("Submit Final Decision", key="questionnaire", on_click=lambda: st.session_state.update(experiment_step="questionnaire"), type="primary"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
-        st.session_state.experiment_step = "questionnaire"
 
 
 def questionnaire():
     """Questionnaire Page"""
     st.title("Questionnaire")
+    if "participant_decision" in st.session_state and "robot_decision" in st.session_state:
+        robot_avg = (st.session_state.participant_decision+st.session_state.robot_decision)/2
+        st.info(f"You & Robot average decision score: **{robot_avg}%**")
+    else:
+        st.warning("Decision data is not available yet.")
     st.markdown("""
     Next, we kindly ask you to complete a short survey to help us better understand your interaction experience and feelings.
     """)
@@ -367,11 +399,10 @@ def questionnaire():
     st.components.v1.iframe(questionnaire_url, width=800, height=600, scrolling=True)
     st.info("Submit your response after filling in the fields.")
     
-    if st.button("Finish Questionnaire"):
-        st.session_state.experiment_step = "post_experiment"
+    st.button("Finish Questionnaire", key="go_post_experiment", on_click=lambda: st.session_state.update(experiment_step="post_experiment"), type="primary")
 
 def post_experiment_page():
-    """Post-Experiment Instructions"""
+    """Post-Experiment Instruction"""
     st.title("Post-Experiment Instructions")
     st.markdown("""
     Thank you for completing this experiment!\n  
@@ -383,14 +414,37 @@ def post_experiment_page():
 # Main Navigation
 if st.session_state.experiment_step == "guide":
     survey_guidance()
-elif st.session_state.experiment_step == 0:
+elif st.session_state.experiment_step == "start":
     start()
-elif st.session_state.experiment_step == 1:
+elif st.session_state.experiment_step == "step1":
     step_1()
+<<<<<<< HEAD
    
 elif st.session_state.experiment_step == "processing":
     processing()
 elif st.session_state.experiment_step == 2:
+=======
+    if 'custom_response' in st.session_state.custom_response is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User] (ID) VALUES (?);",
+                (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
+elif st.session_state.experiment_step == "step2":
+>>>>>>> f2f6d13e5d681f6f872f30a0fe6f7dd8234cd57b
     step_2()
 elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
