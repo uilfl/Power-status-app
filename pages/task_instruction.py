@@ -67,8 +67,25 @@ def start():
 
             # Insert the data into the User table
             cursor.execute(
-                "INSERT INTO [User] (ID) VALUES (?);",
+                "INSERT INTO [User_response] (group_num) VALUES (?);",
                 (st.session_state.custom_response,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    if 'custom_name' in st.session_state.custom_name is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User_response] (user_name) VALUES (?);",
+                (st.session_state.custom_name,)
             )
             conn.commit()
             st.success("Numeric value saved successfully!")
@@ -173,11 +190,51 @@ def step_1():
     Please carefully weigh the advantages and limitations of both options and allocate the budget percentages based on your judgment.
     """)
     
+    start_time = time.time()
     numeric_value = st.slider(
         "Set a percentage for online advertising (percentage):",
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
-    
+    end_time = time.time()
+    time_interval = end_time - start_time
+
+    if numeric_value is not None:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the data into the User table
+            cursor.execute(
+                "INSERT INTO [User_response] (response_answer) VALUES (?);",
+                (numeric_value,)
+            )
+            conn.commit()
+            st.success("Numeric value saved successfully!")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    if time_interval >0:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the time_interval into the User_response table
+            cursor.execute(
+                "INSERT INTO User_response (Change_interval_time) VALUES (?);",
+                (time_interval,)
+            )
+            conn.commit()
+            # st.success("Time interval saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close() 
+
     def confirm_logic():
         st.session_state.participant_decision = numeric_value
 
@@ -225,7 +282,7 @@ def step_2():
 
                 # Insert participant decision into User_response table
                 cursor.execute(
-                    "INSERT INTO User_response (Response) VALUES (?);",
+                    "INSERT INTO User_response (response_answer) VALUES (?);",
                     (st.session_state.participant_decision,)
                 )
                 conn.commit()
@@ -233,7 +290,7 @@ def step_2():
 
                 # Insert robot decision into Robot table
                 cursor.execute(
-                    "INSERT INTO Robot (Response) VALUES (?);",
+                    "INSERT INTO User_response (robot_answer) VALUES (?);",
                     (st.session_state.robot_decision,)
                 )
                 conn.commit()
@@ -309,11 +366,11 @@ def step_2():
     end_time = time.time()
     time_interval = end_time - start_time
     # check whether the user change the answer
-    answer_change = False
+    answer_change = 0
     if final_value == participant_decision:
-        answer_change = False
+        answer_change = 0
     else:
-        answer_change = True
+        answer_change = 1
 
     if answer_change:  # Fix the condition syntax
         try:
