@@ -72,8 +72,13 @@ def start():
             )
             conn.commit()
             st.success("Numeric value saved successfully!")
+<<<<<<< HEAD
         except Exception as e:
             st.error(f"An error occurred: {e}")
+=======
+        except Exception as e :
+            st.error(f"An error occurred :{e}")
+>>>>>>> 53488f40095ccee4d0add3bb42e06dab655e154a
         finally:
             cursor.close()
             conn.close()
@@ -393,8 +398,11 @@ elif st.session_state.experiment_step == "start":
     start()
 elif st.session_state.experiment_step == "step1":
     step_1()
+<<<<<<< HEAD
 elif st.session_state.experiment_step == "processing":
     processing()
+=======
+>>>>>>> 53488f40095ccee4d0add3bb42e06dab655e154a
 elif st.session_state.experiment_step == 2:
     step_2()
 elif st.session_state.experiment_step == "questionnaire":
