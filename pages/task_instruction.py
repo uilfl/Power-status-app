@@ -364,7 +364,7 @@ def questionnaire():
     st.title("Questionnaire")
     if "participant_decision" in st.session_state and "robot_decision" in st.session_state:
         robot_avg = (st.session_state.participant_decision+st.session_state.robot_decision)/2
-        st.info(f"You & Robot average decision score: **{robot_avg}%**")
+        st.info(f"You & Robot average decision for online advertising: **{robot_avg}%**")
     else:
         st.warning("Decision data is not available yet.")
     st.markdown("""
