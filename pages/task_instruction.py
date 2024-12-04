@@ -164,7 +164,7 @@ def start():
 def step_1():
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
-    st.subheader("[Advertising Investment Decision-Making]")
+    st.subheader("Advertising Investment Decision-Making")
     st.markdown("""
     The company is planning a marketing campaign for a clothing brand and needs your help in developing an advertising strategy. 
     Your goal is to maximize brand exposure and sales conversion rates. With a total budget of 1 million NT dollars, you must allocate funds between **online** and **offline advertising** channels within the budget constraints.
