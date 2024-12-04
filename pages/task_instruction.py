@@ -322,7 +322,7 @@ def step_2():
 
             # Insert the answer change into the User_response table
             cursor.execute(
-                "INSERT INTO User_response (Changed_answer) VALUES (?);",
+                "INSERT INTO User_response (changed_answer) VALUES (?);",
                 (answer_change,)  # Use 1 to indicate True in the database
             )
             conn.commit()
