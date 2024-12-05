@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 import random
-import pyodbc
 from utils.initialized_database import get_connection 
 
 # Set page configuration as the first Streamlit command
