@@ -66,41 +66,46 @@ def start():
     # Display the actual values for debugging
     st.write(f"Value of custom_name: {st.session_state.custom_name}")
     st.write(f"Value of custom_response: {st.session_state.custom_response}")
-    if st.session_state.custom_response is not None:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
+    
+    # Initialize variables for insertion
+custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
+custom_response = st.session_state.custom_response.strip()  # Ensure no extra spaces
 
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User_response] (group_id) VALUES (?);",
-                (st.session_state.custom_response,)
-            )
-            conn.commit()
-           
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-    if st.session_state.custom_name is not None:
-       
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
+# Validate and convert custom_response
+if custom_response == "":
+    st.error("Experiment code cannot be empty.")
+else:
+    try:
+        custom_response_int = int(custom_response)  # Convert to integer
+    except ValueError:
+        st.error("Experiment code must be a valid integer.")
+        custom_response_int = None  # Prevent database insertion if invalid
 
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User_response] (user_name) VALUES (?);",
-                (st.session_state.custom_name,)
-            )
-            conn.commit()
-            
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+# Ensure custom_name is not empty
+if custom_name == "":
+    st.error("Name cannot be empty.")
+
+# Proceed to insert into the database if inputs are valid
+if custom_response_int is not None and custom_name != "":
+    try:
+        conn = get_connection()  # Your database connection function
+        cursor = conn.cursor()
+
+        # Insert data into the database
+        cursor.execute(
+            """
+            INSERT INTO [User_response] (group_id, user_name)
+            VALUES (?, ?);
+            """,
+            (custom_response_int, custom_name)  # Pass validated and converted data
+        )
+        conn.commit()
+        st.success("Data inserted successfully!")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+    finally:
+        cursor.close()
+        conn.close()
     # Handle experiment code submission
     if st.button("Submit Response", type="primary"):
         if st.session_state.custom_response:  # Ensure input is not empty
