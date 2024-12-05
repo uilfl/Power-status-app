@@ -350,7 +350,7 @@ elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
-    #user_id = random.randint(1, 1000)
+    user_id = random.randint(1, 1000)
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -359,11 +359,11 @@ elif st.session_state.experiment_step == "post_experiment":
         cursor.execute(
             """
             INSERT INTO User_Response 
-            (user_name, group_id, response_answer,response_time, robot_answer, Change, Changed_answer, Change_interval_time)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            (user_id, user_name, group_id, response_answer,response_time, robot_answer, Change, Changed_answer, Change_interval_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
-                                   # INT
+                # user_id,                   # INT
                 st.session_state.user_name,                      # VARCHAR(MAX)
                 st.session_state.group_ID,           # VARCHAR(50)
                 st.session_state.participant_decision,
@@ -375,7 +375,7 @@ elif st.session_state.experiment_step == "post_experiment":
             )
         )
         conn.commit()
-        st.success("User ID saved successfully!")
+        st.success("saved successfully! Thanks!")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
