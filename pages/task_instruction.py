@@ -99,7 +99,7 @@ def start():
         st.error("Experiment code cannot be empty.")
     else:
         try:
-            custom_response_int = pyodbc.CONVERT_INTEGER(custom_response)  # Convert to integer
+            custom_response_int = pyodbc.SQL_CONVERT_INTEGER(custom_response)  # Convert to integer
         except ValueError:
             st.error("Experiment code must be a valid integer.")
             custom_response_int = None  # Prevent database insertion if invalid
@@ -108,7 +108,7 @@ def start():
     if custom_name == "":
         st.error("Name cannot be empty.")
         try:
-            custom_name = pyodbc.CONVERT_VARCHAR(custom_name)  # Convert to VARCHAR
+            custom_name = pyodbc.SQL_CONVERT_VARCHAR(custom_name)  # Convert to VARCHAR
         except ValueError:
             st.error("Experiment code must be a valid integer.")
             custom_response_int = None  # Prevent database insertion if invalid
