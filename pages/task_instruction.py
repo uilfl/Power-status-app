@@ -59,8 +59,13 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    st.write(st.session_state.custom_name)
-    st.write(st.session_state.custom_response)
+    # Check and display the type of the variables
+    st.write(f"Type of custom_name: {type(st.session_state.custom_name)}")
+    st.write(f"Type of custom_response: {type(st.session_state.custom_response)}")
+
+    # Display the actual values for debugging
+    st.write(f"Value of custom_name: {st.session_state.custom_name}")
+    st.write(f"Value of custom_response: {st.session_state.custom_response}")
     if st.session_state.custom_response is not None:
         try:
             conn = get_connection()
