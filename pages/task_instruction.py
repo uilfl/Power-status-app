@@ -360,7 +360,7 @@ elif st.session_state.experiment_step == "post_experiment":
             """
             INSERT INTO User_Response 
             (user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
                 # user_id,                   # INT
