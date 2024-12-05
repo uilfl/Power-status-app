@@ -343,10 +343,7 @@ elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
-
-user_id = random.randint(1, 1000)
-
-if user_id:
+    user_id = random.randint(1, 1000)
     try:
         conn = get_connection()
         cursor = conn.cursor()
