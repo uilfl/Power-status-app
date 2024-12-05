@@ -18,19 +18,13 @@ if "participant_decision" not in st.session_state:
 if "robot_decision" not in st.session_state:
     st.session_state.robot_decision = None
 if "participant_final_decision" not in st.session_state:
-    st.session_state.participant_final_decision = 0
+    st.session_state.participant_final_decision = None
 if "time_interval_response" not in st.session_state:
     st.session_state.time_interval_response = 0
 if "time_interval_change" not in st.session_state:
-    st.session_state.time_interval_change = 0  
+    st.session_state.time_interval_changee = 0  
 if "answer_change" not in st.session_state:
     st.session_state.answer_change = 0
-
-if "start_time" not in st.session_state:
-    st.session_state.start_time = 0
-if "end_time" not in st.session_state:
-    st.session_state.end_time = 0
-    
 
 # name ='' #st.session_state.custom_name
 # group_ID = '01' #st.session_state.group_ID
@@ -157,7 +151,6 @@ def start():
         # Add Next Page button to proceed
         st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
 def step_1():
-    
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
     st.subheader("Advertising Investment Decision-Making")
@@ -165,10 +158,6 @@ def step_1():
     The company is planning a marketing campaign for a clothing brand and needs your help in developing an advertising strategy. 
     Your goal is to maximize brand exposure and sales conversion rates. With a total budget of 1 million NT dollars, you must allocate funds between **online** and **offline advertising** channels within the budget constraints.
     """)
-
-    # 記錄開始時間
-    st.session_state.start_time = time.time()
-    
     col1, col2 = st.columns(2)
     with col1:
         st.image("online_advertising.jpg", caption="Online Advertising", use_container_width=True)
@@ -190,19 +179,19 @@ def step_1():
     Please carefully weigh the advantages and limitations of both options and allocate the budget percentages based on your judgment.
     """)
     
-    
+    start_time = time.time()
     numeric_value = st.slider(
         "Set a percentage for online advertising (percentage):",
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
+    end_time = time.time()
+    
+    st.session_state.time_interval_response = end_time - start_time
     # participant_answer = numeric_value
+
+    
     
     def confirm_logic():
-        st.session_state.end_time = time.time()
-        if st.session_state.end_time and st.session_state.start_time:
-            st.session_state.time_interval_response = st.session_state.end_time - st.session_state.start_time
-        st.session_state.start_time=0
-        st.session_state.end_time=0
         st.session_state.participant_decision = numeric_value
 
         # Robot decision: adjust based on boundary conditions
@@ -236,7 +225,7 @@ def step_2():
                 time.sleep(0.05)
         st.session_state.loading_complete = True  # 加载完成后更新状态
 
-    st.session_state.start_time = time.time()
+   
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
@@ -297,13 +286,17 @@ def step_2():
     # Final adjustment slider
     st.info("You can adjust the final answer, or not adjust it at all! But you will eventually see each other's average answers.")
     
+    start_time = time.time()
+    
     final_value = st.slider(
         label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
-    
+    end_time = time.time()
+    st.session_state.participant_final_decision=final_value
+    st.session_state.time_interval_change = end_time - start_time
     # check whether the user change the answer
-    st.session_state.participant_final_decision = final_value
+    
     if final_value == participant_decision:
         st.session_state.answer_change = 0
     else:
@@ -314,10 +307,6 @@ def step_2():
     if st.button("Submit Final Decision", key="questionnaire", on_click=lambda: st.session_state.update(experiment_step="questionnaire"), type="primary"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
-        st.session_state.end_time = time.time()
-        st.session_state.time_interval_change = st.session_state.end_time - st.session_state.start_time
-        st.session_state.start_time=0
-        st.session_state.end_time=0
 
     
 
@@ -370,7 +359,6 @@ elif st.session_state.experiment_step == "post_experiment":
         cursor.execute(
             """
             INSERT INTO User_Response 
-<<<<<<< HEAD
             (user_id, user_name, group_id, response_answer,response_time, robot_answer, Change, Changed_answer, Change_interval_time)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
@@ -379,30 +367,15 @@ elif st.session_state.experiment_step == "post_experiment":
                 name,                      # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
                 participant_answer,
-                time_interval_response,        # VARCHAR(50)    # INT
+                time_interval_response,       # VARCHAR(50)    # INT
                 robot_decision,            # INT
                 answer_change,             # INT
                 final_value,               # INT
-                time_interval_change       # CHAR(50)
-=======
-            (user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-            """,
-            (
-                # user_id,                   # INT
-                st.session_state.user_name,# VARCHAR(MAX)
-                st.session_state.group_ID,# VARCHAR(50)
-                st.session_state.participant_decision,# VARCHAR(50)
-                st.session_state.time_interval_response,# INT
-                st.session_state.robot_decision,# INT
-                st.session_state.answer_change,# INT
-                st.session_state.participant_final_decision,# INT
-                st.session_state.time_interval_change# CHAR(50)
->>>>>>> 56e93d4b1be71053e5b3438b1ddb43b9c7a56e69
+                time_interval_change,       # CHAR(50)
             )
         )
         conn.commit()
-        st.success("saved successfully! Thanks!")
+        st.success("User ID saved successfully!")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
