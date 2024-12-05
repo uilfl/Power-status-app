@@ -26,7 +26,6 @@ if "time_interval_change" not in st.session_state:
 if "answer_change" not in st.session_state:
     st.session_state.answer_change = 0
 
-
 # name ='' #st.session_state.custom_name
 # group_ID = '01' #st.session_state.group_ID
 # participant_answer = 0 #st.session_state.participant_decision
@@ -35,6 +34,7 @@ if "answer_change" not in st.session_state:
 # final_value = 0 #st.session_state.participant_final_decision
 # time_interval_change = 0
 # answer_change = 0 #st.session_state.answer_change
+
 
 
 
@@ -355,7 +355,7 @@ elif st.session_state.experiment_step == "post_experiment":
         conn = get_connection()
         cursor = conn.cursor()
 
-        # Insert all columns into the User_Response table
+            # Insert all columns into the User_Response table
         cursor.execute(
             """
             INSERT INTO User_Response 
