@@ -69,6 +69,55 @@ def start():
     st.write(f"Value of custom_name: {st.session_state.custom_name}")
     st.write(f"Value of custom_response: {st.session_state.custom_response}")
     
+    
+    # Handle experiment code submission
+    if st.button("Submit Response", type="primary"):
+        if st.session_state.custom_response:  # Ensure input is not empty
+            if st.session_state.custom_response == "01":
+                st.session_state["role_assigned"] = True
+                st.session_state["success_message"] = (
+                    "Your role is **Creative Worker**. "
+                    "This role is primarily responsible for generating and managing key ideas. "
+                    "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
+
+                    "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
+                    "**Your collaborator does not** have such control over you."
+                )
+            elif st.session_state.custom_response == "02":
+                st.session_state["role_assigned"] = True
+                st.session_state["success_message"] = (
+                    "Your role is **Creative Worker**. "
+                    "This role is primarily responsible for generating and managing key ideas. "
+                    "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
+
+                    "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
+                    "**You do not** have such control over them."
+                )
+            elif st.session_state.custom_response == "03":
+                st.session_state["role_assigned"] = True
+                st.session_state["success_message"] = (
+                    "Your role is **Support Worker**. "
+                    "This role is mainly responsible for small tasks and record-keeping. "
+                    "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
+
+                    "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
+                    "**Your collaborator does not** have such control over you."
+                )
+            elif st.session_state.custom_response == "04":
+                st.session_state["role_assigned"] = True
+                st.session_state["success_message"] = (
+                    "Your role is **Support Worker**. "
+                    "This role is mainly responsible for small tasks and record-keeping. "
+                    "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
+
+                    "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
+                    "**You do not** have such control over them."
+                )
+            else:
+                st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
+        else:
+            st.warning("Please enter your experiment code before submitting.")
+  
     user_id = random.randint(1, 1000)
     st.write(f"User ID: {user_id}")
     if user_id:
@@ -118,55 +167,6 @@ def start():
         finally:
             cursor.close()
             conn.close()
-    # Handle experiment code submission
-    if st.button("Submit Response", type="primary"):
-        if st.session_state.custom_response:  # Ensure input is not empty
-            if st.session_state.custom_response == "01":
-                st.session_state["role_assigned"] = True
-                st.session_state["success_message"] = (
-                    "Your role is **Creative Worker**. "
-                    "This role is primarily responsible for generating and managing key ideas. "
-                    "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
-
-                    "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
-                    "**Your collaborator does not** have such control over you."
-                )
-            elif st.session_state.custom_response == "02":
-                st.session_state["role_assigned"] = True
-                st.session_state["success_message"] = (
-                    "Your role is **Creative Worker**. "
-                    "This role is primarily responsible for generating and managing key ideas. "
-                    "During conversations, you are expected to use **a more commanding tone** when interacting with other collaborators. "
-
-                    "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
-                    "**You do not** have such control over them."
-                )
-            elif st.session_state.custom_response == "03":
-                st.session_state["role_assigned"] = True
-                st.session_state["success_message"] = (
-                    "Your role is **Support Worker**. "
-                    "This role is mainly responsible for small tasks and record-keeping. "
-                    "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
-
-                    "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
-                    "**Your collaborator does not** have such control over you."
-                )
-            elif st.session_state.custom_response == "04":
-                st.session_state["role_assigned"] = True
-                st.session_state["success_message"] = (
-                    "Your role is **Support Worker**. "
-                    "This role is mainly responsible for small tasks and record-keeping. "
-                    "During conversations, you are expected to use **a more polite tone** when interacting with other collaborators. "
-
-                    "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
-                    "**You do not** have such control over them."
-                )
-            else:
-                st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
-        else:
-            st.warning("Please enter your experiment code before submitting.")
-  
-   
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
