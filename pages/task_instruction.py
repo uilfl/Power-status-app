@@ -22,7 +22,7 @@ if "participant_final_decision" not in st.session_state:
 if "time_interval_response" not in st.session_state:
     st.session_state.time_interval_response = 0
 if "time_interval_change" not in st.session_state:
-    st.session_state.time_interval_changee = 0  
+    st.session_state.time_interval_change = 0  
 if "answer_change" not in st.session_state:
     st.session_state.answer_change = 0
 
