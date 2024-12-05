@@ -151,6 +151,7 @@ def start():
         # Add Next Page button to proceed
         st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
 def step_1():
+    start_time = time.time()
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
     st.subheader("Advertising Investment Decision-Making")
@@ -179,19 +180,18 @@ def step_1():
     Please carefully weigh the advantages and limitations of both options and allocate the budget percentages based on your judgment.
     """)
     
-    start_time = time.time()
+    
     numeric_value = st.slider(
         "Set a percentage for online advertising (percentage):",
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
-    end_time = time.time()
-    
-    st.session_state.time_interval_response = end_time - start_time
     # participant_answer = numeric_value
 
     
     
     def confirm_logic():
+        end_time = time.time()
+        st.session_state.time_interval_response = end_time - start_time
         st.session_state.participant_decision = numeric_value
 
         # Robot decision: adjust based on boundary conditions
@@ -225,7 +225,7 @@ def step_2():
                 time.sleep(0.05)
         st.session_state.loading_complete = True  # 加载完成后更新状态
 
-   
+    start_time = time.time()
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
@@ -286,15 +286,11 @@ def step_2():
     # Final adjustment slider
     st.info("You can adjust the final answer, or not adjust it at all! But you will eventually see each other's average answers.")
     
-    start_time = time.time()
-    
     final_value = st.slider(
         label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
-    end_time = time.time()
-    st.session_state.participant_final_decision=final_value
-    st.session_state.time_interval_change = end_time - start_time
+    
     # check whether the user change the answer
     
     if final_value == participant_decision:
@@ -307,6 +303,9 @@ def step_2():
     if st.button("Submit Final Decision", key="questionnaire", on_click=lambda: st.session_state.update(experiment_step="questionnaire"), type="primary"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
+        end_time = time.time()
+        st.session_state.participant_final_decision=final_value
+        st.session_state.time_interval_change = end_time - start_time
 
     
 
