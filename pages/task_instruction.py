@@ -342,24 +342,35 @@ elif st.session_state.experiment_step == "post_experiment":
 
 
 if user_id:
-       try:
-           conn = get_connection()
-           cursor = conn.cursor()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
 
+        # Insert all columns into the User_Response table
+        cursor.execute(
+            """
+            INSERT INTO User_Response 
+            (user_id, user_name, group_id, response_answer, response_time, robot_answer, change, changed_answer, change_interval_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """,
+            (
+                user_id,                   # INT
+                custom_name,               # VARCHAR(MAX)
+                custom_response,           # VARCHAR(50)
+                participant_decision,      # VARCHAR(50)
+                time_interval_response,    # INT
+                robot_decision,            # INT
+                answer_change,             # INT
+                final_value,               # INT
+                time_interval_change       # CHAR(50)
+            )
+        )
+        conn.commit()
+        st.success("User ID saved successfully!")
 
-           # Insert the user_id into the User_response table
-           cursor.execute(
-               "INSERT INTO User_Response (user_id, user_name, group_id, response_answer, response_time, robot_answer, change, changed_answer, change_interval_time) VALUES (?);",
-               (user_id,custom_name,custom_response,participant_decision,time_interval_response,robot_decision,answer_change,final_value,time_interval_change)
-           )
-           conn.commit()
-           st.success("User ID saved successfully!")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
-
-       except Exception as e:
-           st.error(f"An error occurred: {e}")
-
-
-       finally:
-           cursor.close()
-           conn.close()
+    finally:
+        cursor.close()
+        conn.close()
