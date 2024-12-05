@@ -363,7 +363,7 @@ elif st.session_state.experiment_step == "post_experiment":
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
-                ,                   # INT
+                                   # INT
                 st.session_state.user_name,                      # VARCHAR(MAX)
                 st.session_state.group_ID,           # VARCHAR(50)
                 st.session_state.participant_decision,
