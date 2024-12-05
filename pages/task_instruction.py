@@ -364,14 +364,14 @@ elif st.session_state.experiment_step == "post_experiment":
             """,
             (
                 user_id,                   # INT
-                user_name,                      # VARCHAR(MAX)
-                custom_response,           # VARCHAR(50)
-                participant_answer,
-                time_interval_response,       # VARCHAR(50)    # INT
-                robot_decision,            # INT
-                answer_change,             # INT
-                final_value,               # INT
-                time_interval_change,       # CHAR(50)
+                st.session_state.user_name,                      # VARCHAR(MAX)
+                st.session_state.custom_response,           # VARCHAR(50)
+                st.session_state.participant_answer,
+                st.session_state.time_interval_response,       # VARCHAR(50)    # INT
+                st.session_state.robot_decision,            # INT
+                st.session_state.answer_change,             # INT
+                st.session_state.final_value,               # INT
+                st.session_state.time_interval_changee,       # CHAR(50)
             )
         )
         conn.commit()
