@@ -354,15 +354,14 @@ elif st.session_state.experiment_step == "post_experiment":
         cursor.execute(
             """
             INSERT INTO User_Response 
-            (user_id, user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
+            (user_id, user_name, group_id, response_answer, robot_answer, Change, Changed_answer, Change_interval_time)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
                 user_id,                   # INT
-                name,               # VARCHAR(MAX)
+                name,                      # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
-                participant_answer,      # VARCHAR(50)
-                time_interval_response,    # INT
+                participant_answer,        # VARCHAR(50)    # INT
                 robot_decision,            # INT
                 answer_change,             # INT
                 final_value,               # INT
