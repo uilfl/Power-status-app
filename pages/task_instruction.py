@@ -312,7 +312,7 @@ def step_2():
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
         st.session_state.end_time = time.time()
-        st.session_state.participant_final_decision=final_value
+        st.session_state.participant_final_decision = final_value
         st.session_state.time_interval_change = st.session_state.end_time - st.session_state.start_time
         st.session_state.start_time=0
         st.session_state.end_time=0
