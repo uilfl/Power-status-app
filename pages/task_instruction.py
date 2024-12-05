@@ -96,8 +96,6 @@ def start():
      # Ensure no extra spaces
     if custom_response.isdigit():
         st.write(custom_response)
-    else:
-        st.write(type(custom_response))
     # Validate and convert custom_response
     # Proceed to insert into the database if inputs are valid
     if custom_response is not None and custom_name != "":
