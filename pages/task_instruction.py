@@ -18,7 +18,9 @@ if "custom_name" not in st.session_state:
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
-
+# Global variable declarations with type hints
+global name, participant_answer, custom_response, time_interval_response
+global robot_decision, final_value, time_interval_change, answer_change
 name =''
 participant_answer = 0
 custom_response = '01'
