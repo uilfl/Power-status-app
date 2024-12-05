@@ -58,7 +58,7 @@ def start():
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
-    st.session_state.custom_response = int(st.text_input("Please enter your experiment code:"))
+    st.session_state.custom_response = st.text_input("Please enter your experiment code:")
     
     if st.session_state.custom_response is not None:
         try:
@@ -191,10 +191,10 @@ def step_1():
     """)
     
     start_time = time.time()
-    numeric_value = int(st.slider(
+    numeric_value = st.slider(
         "Set a percentage for online advertising (percentage):",
         min_value=0, max_value=100, value=50, key="decision_slider"
-    ))
+    )
     end_time = time.time()
     time_interval = end_time - start_time
 
