@@ -19,6 +19,7 @@ if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
 user_id = random.randint(1, 1000)
+print(user_id)
 if user_id:
     try:
         conn = get_connection()
