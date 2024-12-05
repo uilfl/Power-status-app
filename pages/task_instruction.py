@@ -178,6 +178,9 @@ def step_1():
     end_time = time.time()
     global time_interval_response
     time_interval_response = end_time - start_time
+    global participant_decision
+    global robot_decision
+    participant_decision = numeric_value
 
     
     
@@ -194,7 +197,7 @@ def step_1():
 
         # 更新狀態
         st.session_state.experiment_step = "step2"
-
+    robot_decision = st.session_state.robot_decision
     # 按鈕與邏輯綁定
     st.button("Confirm", key="confirm_button", on_click=confirm_logic, type="primary")
     
@@ -215,8 +218,7 @@ def step_2():
                 time.sleep(0.05)
         st.session_state.loading_complete = True  # 加载完成后更新状态
 
-    global participant_decision
-    global robot_decision
+   
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
