@@ -70,7 +70,7 @@ def start():
     # Initialize variables for insertion
     custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
     custom_response = st.session_state.custom_response.strip()  # Ensure no extra spaces
-
+    custom_response_int = None  # Initialize as None for validation
     # Validate and convert custom_response
     if custom_response == "":
         st.error("Experiment code cannot be empty.")
