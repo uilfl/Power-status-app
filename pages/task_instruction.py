@@ -19,8 +19,8 @@ if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
 user_id = random.randint(1, 1000)
-global custom_name_name 
-global participant_answer
+name =''
+participant_answer = 0
 
 
 def survey_guidance():
@@ -61,13 +61,13 @@ def start():
     )
     
     global custom_response 
-    
+    name = st.session_state.custom_name
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    custom_name_name = st.session_state.custom_name.strip()
-    custom_response = st.session_state.custom_response
+    
+    
     
     # Handle experiment code submission
     if st.button("Submit Response", type="primary"):
@@ -116,7 +116,8 @@ def start():
                 st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
         else:
             st.warning("Please enter your experiment code before submitting.")
-
+    
+    custom_response = st.session_state.custom_response
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
@@ -352,7 +353,7 @@ if user_id:
             """,
             (
                 user_id,                   # INT
-                custom_name_name,               # VARCHAR(MAX)
+                name,               # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
                 participant_answer,      # VARCHAR(50)
                 time_interval_response,    # INT
