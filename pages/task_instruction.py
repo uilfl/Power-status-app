@@ -64,7 +64,7 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    custom_name = st.session_state.custom_name
+    custom_name = st.session_state.custom_name.strip()
     custom_response = st.session_state.custom_response
     
     
