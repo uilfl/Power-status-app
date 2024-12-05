@@ -26,6 +26,12 @@ if "time_interval_change" not in st.session_state:
 if "answer_change" not in st.session_state:
     st.session_state.answer_change = 0
 
+if "start_time" not in st.session_state:
+    st.session_state.start_time = 0
+if "end_time" not in st.session_state:
+    st.session_state.end_time = 0
+    
+
 # name ='' #st.session_state.custom_name
 # group_ID = '01' #st.session_state.group_ID
 # participant_answer = 0 #st.session_state.participant_decision
@@ -151,7 +157,7 @@ def start():
         # Add Next Page button to proceed
         st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
 def step_1():
-    start_time = time.time()
+    st.session_state.start_time = time.time()
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
     st.subheader("Advertising Investment Decision-Making")
@@ -190,8 +196,10 @@ def step_1():
     
     
     def confirm_logic():
-        end_time = time.time()
-        st.session_state.time_interval_response = end_time - start_time
+        st.session_state.end_time = time.time()
+        st.session_state.time_interval_response = st.session_state.end_time - st.session_state.start_time
+        st.session_state.start_time=0
+        st.session_state.end_time=0
         st.session_state.participant_decision = numeric_value
 
         # Robot decision: adjust based on boundary conditions
@@ -225,7 +233,7 @@ def step_2():
                 time.sleep(0.05)
         st.session_state.loading_complete = True  # 加载完成后更新状态
 
-    start_time = time.time()
+    st.session_state.start_time = time.time()
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
@@ -303,9 +311,11 @@ def step_2():
     if st.button("Submit Final Decision", key="questionnaire", on_click=lambda: st.session_state.update(experiment_step="questionnaire"), type="primary"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
-        end_time = time.time()
+        st.session_state.end_time = time.time()
         st.session_state.participant_final_decision=final_value
-        st.session_state.time_interval_change = end_time - start_time
+        st.session_state.time_interval_change = st.session_state.end_time - st.session_state.start_time
+        st.session_state.start_time=0
+        st.session_state.end_time=0
 
     
 
