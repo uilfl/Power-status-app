@@ -9,25 +9,32 @@ st.set_page_config(page_title="Survey & Experiment", page_icon="📊")
 # Initialize session state
 if "experiment_step" not in st.session_state:
     st.session_state.experiment_step = "guide"
+if "user_name" not in st.session_state:
+    st.session_state.user_name = ""
+if "group_ID" not in st.session_state:
+    st.session_state.group_ID = ""
 if "participant_decision" not in st.session_state:
     st.session_state.participant_decision = None
 if "robot_decision" not in st.session_state:
     st.session_state.robot_decision = None
-if "custom_name" not in st.session_state:
-    st.session_state.custom_name = None
-if "custom_response" not in st.session_state:
-    st.session_state.custom_response = None
+if "participant_final_decision" not in st.session_state:
+    st.session_state.participant_final_decision = None
+if "time_interval_response" not in st.session_state:
+    st.session_state.time_interval_response = 0
+if "time_interval_change" not in st.session_state:
+    st.session_state.time_interval_changee = 0  
+if "answer_change" not in st.session_state:
+    st.session_state.answer_change = 0
 
 
-name =''
-participant_answer = 0
-custom_response = '01'
-time_interval_response = 0
-participant_answer = 0
-robot_decision = 0
-final_value = 0
-time_interval_change = 0
-answer_change = 0
+# name ='' #st.session_state.custom_name
+# group_ID = '01' #st.session_state.group_ID
+# participant_answer = 0 #st.session_state.participant_decision
+# time_interval_response = 0 
+# robot_decision = 0 #st.session_state.robot_decision
+# final_value = 0 #st.session_state.participant_final_decision
+# time_interval_change = 0
+# answer_change = 0 #st.session_state.answer_change
 
 
 
@@ -69,18 +76,18 @@ def start():
     )
     
 
-    name = st.session_state.custom_name
+    # name = st.session_state.custom_name
      # Text input for experiment name
-    st.session_state.custom_name = st.text_input("Please enter your name:")
+    st.session_state.user_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
-    st.session_state.custom_response = st.text_input("Please enter your experiment code:")
+    st.session_state.group_ID = st.text_input("Please enter your experiment code:")
     
     
     
     # Handle experiment code submission
     if st.button("Submit Response", type="primary"):
-        if st.session_state.custom_response:  # Ensure input is not empty
-            if st.session_state.custom_response == "01":
+        if st.session_state.group_ID:  # Ensure input is not empty
+            if st.session_state.group_ID == "01":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Creative Worker**. "
@@ -90,7 +97,7 @@ def start():
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
-            elif st.session_state.custom_response == "02":
+            elif st.session_state.group_ID == "02":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Creative Worker**. "
@@ -100,7 +107,7 @@ def start():
                     "In the final stage, **your collaborator has the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**You do not** have such control over them."
                 )
-            elif st.session_state.custom_response == "03":
+            elif st.session_state.group_ID == "03":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Support Worker**. "
@@ -110,7 +117,7 @@ def start():
                     "In the final stage, **you have the authority to distribute the group bonus** based on the contributions made during the collaboration. "
                     "**Your collaborator does not** have such control over you."
                 )
-            elif st.session_state.custom_response == "04":
+            elif st.session_state.group_ID == "04":
                 st.session_state["role_assigned"] = True
                 st.session_state["success_message"] = (
                     "Your role is **Support Worker**. "
@@ -125,7 +132,7 @@ def start():
         else:
             st.warning("Please enter your experiment code before submitting.")
     
-    custom_response = st.session_state.custom_response
+    # group_ID = st.session_state.group_ID
     # Show success message if available
     if st.session_state.get("success_message"):
         st.success(st.session_state["success_message"])
@@ -179,8 +186,8 @@ def step_1():
     )
     end_time = time.time()
     
-    time_interval_response = end_time - start_time
-    participant_answer = numeric_value
+    st.session_state.time_interval_response = end_time - start_time
+    # participant_answer = numeric_value
 
     
     
@@ -223,29 +230,29 @@ def step_2():
     robot_decision = st.session_state.robot_decision
 
 
-    # Determine roles and images based on custom_response
-    if st.session_state.custom_response == "01":
+    # Determine roles and images based on group_ID
+    if st.session_state.group_ID == "01":
         participant_status = "Creative Worker"
         robot_status = "Support Worker"
         participant_image = "4.png"
         participant_power="have the authority to distribute the group bonus"
         robot_image = "1.png"
         robot_power="do not have the authority to distribute the group bonus"
-    elif st.session_state.custom_response == "02":
+    elif st.session_state.group_ID == "02":
         participant_status = "Creative Worker"
         robot_status = "Support Worker"
         participant_power="do not have the authority to distribute the group bonus"
         participant_image = "3.png"
         robot_power="have the authority to distribute the group bonus"
         robot_image = "2.png"
-    elif st.session_state.custom_response == "03":
+    elif st.session_state.group_ID == "03":
         participant_status = "Support Worker"
         robot_status = "Creative Worker"
         participant_power="have the authority to distribute the group bonus"
         participant_image = "4.png"
         robot_power="do not have the authority to distribute the group bonus"
         robot_image = "1.png"
-    elif st.session_state.custom_response == "04":
+    elif st.session_state.group_ID == "04":
         participant_status = "Support Worker"
         robot_status = "Creative Worker"
         participant_power="do not have the authority to distribute the group bonus"
@@ -286,14 +293,14 @@ def step_2():
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
     end_time = time.time()
-    
-    time_interval_change = end_time - start_time
+    st.session_state.participant_final_decision=final_value
+    st.session_state.time_interval_change = end_time - start_time
     # check whether the user change the answer
     
     if final_value == participant_decision:
-        answer_change = 0
+        st.session_state.answer_change = 0
     else:
-        answer_change = 1
+        st.session_state.answer_change = 1
     
 
     # Submit button with unique key
@@ -343,7 +350,7 @@ elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
-    user_id = random.randint(1, 1000)
+    # user_id = random.randint(1, 1000)
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -352,19 +359,19 @@ elif st.session_state.experiment_step == "post_experiment":
         cursor.execute(
             """
             INSERT INTO User_Response 
-            (user_id, user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
+            (user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
-                user_id,                   # INT
-                name,               # VARCHAR(MAX)
-                custom_response,           # VARCHAR(50)
-                participant_answer,      # VARCHAR(50)
-                time_interval_response,    # INT
-                robot_decision,            # INT
-                answer_change,             # INT
-                final_value,               # INT
-                time_interval_change       # CHAR(50)
+                # user_id,                   # INT
+                st.session_state.user_name,# VARCHAR(MAX)
+                st.session_state.group_ID,# VARCHAR(50)
+                st.session_state.participant_decision,# VARCHAR(50)
+                st.session_state.time_interval_response,# INT
+                st.session_state.robot_decision,# INT
+                st.session_state.answer_change,# INT
+                st.session_state.participant_final_decision,# INT
+                st.session_state.time_interval_change# CHAR(50)
             )
         )
         conn.commit()
