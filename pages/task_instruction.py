@@ -22,7 +22,7 @@ if "participant_final_decision" not in st.session_state:
 if "time_interval_response" not in st.session_state:
     st.session_state.time_interval_response = 0
 if "time_interval_change" not in st.session_state:
-    st.session_state.time_interval_changee = 0  
+    st.session_state.time_interval_change = 0  
 if "answer_change" not in st.session_state:
     st.session_state.answer_change = 0
 
@@ -371,7 +371,7 @@ elif st.session_state.experiment_step == "post_experiment":
                 st.session_state.robot_decision,            # INT
                 st.session_state.answer_change,             # INT
                 st.session_state.participant_final_decision,               # INT
-                st.session_state.time_interval_changee,       # CHAR(50)
+                st.session_state.time_interval_change,       # CHAR(50)
             )
         )
         conn.commit()
