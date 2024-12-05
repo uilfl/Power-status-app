@@ -92,29 +92,10 @@ def start():
             conn.close()
     # Initialize variables for insertion
     custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
-    custom_response = st.session_state.custom_response.strip()  # Ensure no extra spaces
-    custom_response_int = None  # Initialize as None for validation
+    custom_response = st.session_state.custom_response.strip()  # Ensure no extra spacesInitialize as None for validation
     # Validate and convert custom_response
-    if custom_response == "":
-        st.error("Experiment code cannot be empty.")
-    else:
-        try:
-            custom_response_int = pyodbc.SQL_CONVERT_INTEGER(custom_response)  # Convert to integer
-        except ValueError:
-            st.error("Experiment code must be a valid integer.")
-            custom_response_int = None  # Prevent database insertion if invalid
-
-    # Ensure custom_name is not empty
-    if custom_name == "":
-        st.error("Name cannot be empty.")
-        try:
-            custom_name = pyodbc.SQL_CONVERT_VARCHAR(custom_name)  # Convert to VARCHAR
-        except ValueError:
-            st.error("Experiment code must be a valid integer.")
-            custom_response_int = None  # Prevent database insertion if invalid
-
     # Proceed to insert into the database if inputs are valid
-    if custom_response_int is not None and custom_name != "":
+    if custom_response is not None and custom_name != "":
         try:
             conn = get_connection()  # Your database connection function
             cursor = conn.cursor()
@@ -125,7 +106,7 @@ def start():
                 INSERT INTO [User_response] (group_id, user_name)
                 VALUES (?, ?);
                 """,
-                (custom_response_int, custom_name)  # Pass validated and converted data
+                (pyodbc.SQL_CONVERT_INTEGER(custom_response), pyodbc.SQL_CONVERT_VARCHAR(custom_name))  # Pass validated and converted data
             )
             conn.commit()
             st.success("Data inserted successfully!")
