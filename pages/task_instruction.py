@@ -57,15 +57,17 @@ def start():
         If you have any questions during the study, please raise your hand to notify the experimenter.
         """
     )
+    global custom_name 
+    global custom_response 
+    
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    
-    global custom_name 
-    global custom_response 
     custom_name = st.session_state.custom_name
     custom_response = st.session_state.custom_response
+    
+    
     # Check and display the type of the variables
     st.write(f"Type of custom_name: {type(st.session_state.custom_name)}")
     st.write(f"Type of custom_response: {type(st.session_state.custom_response)}")
