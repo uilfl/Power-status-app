@@ -108,7 +108,7 @@ def start():
     if custom_name == "":
         st.error("Name cannot be empty.")
         try:
-            custom_name = pyodbc.SQL_WCHAR(custom_name)  # Convert to integer
+            custom_name = pyodbc.SQL_VARCHAR(custom_name)  # Convert to integer
         except ValueError:
             st.error("Experiment code must be a valid integer.")
             custom_response_int = None  # Prevent database insertion if invalid
