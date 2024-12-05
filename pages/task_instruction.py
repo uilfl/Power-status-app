@@ -59,9 +59,9 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    
+    print(st.session_state.custom_name)
+    print(st.session_state.custom_response)
     if st.session_state.custom_response is not None:
-        custom_response = int(st.session_state.custom_response)
         try:
             conn = get_connection()
             cursor = conn.cursor()
@@ -69,7 +69,7 @@ def start():
             # Insert the data into the User table
             cursor.execute(
                 "INSERT INTO [User_response] (group_id) VALUES (?);",
-                (custom_response,)
+                (st.session_state.custom_response,)
             )
             conn.commit()
            
@@ -79,7 +79,7 @@ def start():
             cursor.close()
             conn.close()
     if st.session_state.custom_name is not None:
-        custom_name = st.session_state.custom_name
+       
         try:
             conn = get_connection()
             cursor = conn.cursor()
@@ -87,7 +87,7 @@ def start():
             # Insert the data into the User table
             cursor.execute(
                 "INSERT INTO [User_response] (user_name) VALUES (?);",
-                (custom_name,)
+                (st.session_state.custom_name,)
             )
             conn.commit()
             
