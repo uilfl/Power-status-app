@@ -1,2 +1,4 @@
 .venv
 .streamlit
+/database
+/test_files
