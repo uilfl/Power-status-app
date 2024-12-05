@@ -57,14 +57,14 @@ def start():
         If you have any questions during the study, please raise your hand to notify the experimenter.
         """
     )
-    global custom_name 
+    global custom_name_name 
     global custom_response 
     
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    custom_name = st.session_state.custom_name.strip()
+    custom_name_name = st.session_state.custom_name.strip()
     custom_response = st.session_state.custom_response
     
     
@@ -178,9 +178,9 @@ def step_1():
     end_time = time.time()
     global time_interval_response
     time_interval_response = end_time - start_time
-    global participant
+    global participant_answer
     global robot_decision
-    participant= numeric_value
+    participant_answer = numeric_value
 
     
     
@@ -359,9 +359,9 @@ if user_id:
             """,
             (
                 user_id,                   # INT
-                custom_name,               # VARCHAR(MAX)
+                custom_name_name,               # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
-                participant,      # VARCHAR(50)
+                participant_answer,      # VARCHAR(50)
                 time_interval_response,    # INT
                 robot_decision,            # INT
                 answer_change,             # INT
