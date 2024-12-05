@@ -18,7 +18,7 @@ if "custom_name" not in st.session_state:
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
-user_id = random.randint(1, 1000)
+
 name =''
 participant_answer = 0
 custom_response = '01'
@@ -344,6 +344,7 @@ elif st.session_state.experiment_step == "questionnaire":
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
 
+user_id = random.randint(1, 1000)
 
 if user_id:
     try:
