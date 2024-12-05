@@ -178,9 +178,9 @@ def step_1():
     end_time = time.time()
     global time_interval_response
     time_interval_response = end_time - start_time
-    global participant_decision
+    global participant
     global robot_decision
-    participant_decision = numeric_value
+    participant= numeric_value
 
     
     
@@ -361,7 +361,7 @@ if user_id:
                 user_id,                   # INT
                 custom_name,               # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
-                participant_decision,      # VARCHAR(50)
+                participant,      # VARCHAR(50)
                 time_interval_response,    # INT
                 robot_decision,            # INT
                 answer_change,             # INT
