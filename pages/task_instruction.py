@@ -22,6 +22,13 @@ user_id = random.randint(1, 1000)
 name =''
 participant_answer = 0
 custom_response = '01'
+time_interval_response = 0
+participant_answer = 0
+robot_decision = 0
+final_value = 0
+time_interval_change = 0
+answer_change = 0
+
 
 
 def survey_guidance():
@@ -171,10 +178,8 @@ def step_1():
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
     end_time = time.time()
-    global time_interval_response
+    
     time_interval_response = end_time - start_time
-    global participant_answer
-    global robot_decision
     participant_answer = numeric_value
 
     
@@ -275,16 +280,16 @@ def step_2():
     st.info("You can adjust the final answer, or not adjust it at all! But you will eventually see each other's average answers.")
     
     start_time = time.time()
-    global final_value
+    
     final_value = st.slider(
         label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
     end_time = time.time()
-    global time_interval_change
+    
     time_interval_change = end_time - start_time
     # check whether the user change the answer
-    global answer_change 
+    
     if final_value == participant_decision:
         answer_change = 0
     else:
