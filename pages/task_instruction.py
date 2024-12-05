@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 import random
+import pyodbc
 from utils.initialized_database import get_connection 
 
 # Set page configuration as the first Streamlit command
@@ -98,7 +99,7 @@ def start():
         st.error("Experiment code cannot be empty.")
     else:
         try:
-            custom_response_int = int(custom_response)  # Convert to integer
+            custom_response_int = pyodbc(custom_response,pyodbc.BIGINT)  # Convert to integer
         except ValueError:
             st.error("Experiment code must be a valid integer.")
             custom_response_int = None  # Prevent database insertion if invalid
@@ -107,7 +108,7 @@ def start():
     if custom_name == "":
         st.error("Name cannot be empty.")
         try:
-            custom_name = str(custom_name)  # Convert to integer
+            custom_name = pyodbc.cast(custom_name,pyodbc.VARCHAR)  # Convert to integer
         except ValueError:
             st.error("Experiment code must be a valid integer.")
             custom_response_int = None  # Prevent database insertion if invalid
