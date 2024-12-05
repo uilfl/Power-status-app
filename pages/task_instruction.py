@@ -93,8 +93,11 @@ def start():
     # Initialize variables for insertion
     custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
     custom_response = st.session_state.custom_response.strip()
-    custom_response = int(custom_response) 
-      # Ensure no extra spacesInitialize as None for validation
+     # Ensure no extra spaces
+    if custom_response.isdigit():
+        st.write(custom_response)
+    else:
+        st.write(type(custom_response))
     # Validate and convert custom_response
     # Proceed to insert into the database if inputs are valid
     if custom_response is not None and custom_name != "":
