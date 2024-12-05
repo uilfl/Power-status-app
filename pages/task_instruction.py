@@ -157,7 +157,7 @@ def start():
         # Add Next Page button to proceed
         st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
 def step_1():
-    st.session_state.start_time = time.time()
+    
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
     st.subheader("Advertising Investment Decision-Making")
@@ -165,6 +165,10 @@ def step_1():
     The company is planning a marketing campaign for a clothing brand and needs your help in developing an advertising strategy. 
     Your goal is to maximize brand exposure and sales conversion rates. With a total budget of 1 million NT dollars, you must allocate funds between **online** and **offline advertising** channels within the budget constraints.
     """)
+
+    # 記錄開始時間
+    st.session_state.start_time = time.time()
+    
     col1, col2 = st.columns(2)
     with col1:
         st.image("online_advertising.jpg", caption="Online Advertising", use_container_width=True)
@@ -192,12 +196,11 @@ def step_1():
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
     # participant_answer = numeric_value
-
-    
     
     def confirm_logic():
         st.session_state.end_time = time.time()
-        st.session_state.time_interval_response = st.session_state.end_time - st.session_state.start_time
+        if st.session_state.end_time and st.session_state.start_time:
+            st.session_state.time_interval_response = st.session_state.end_time - st.session_state.start_time
         st.session_state.start_time=0
         st.session_state.end_time=0
         st.session_state.participant_decision = numeric_value
