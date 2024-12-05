@@ -59,8 +59,8 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
-    print(st.session_state.custom_name)
-    print(st.session_state.custom_response)
+    st.write(st.session_state.custom_name)
+    st.write(st.session_state.custom_response)
     if st.session_state.custom_response is not None:
         try:
             conn = get_connection()
