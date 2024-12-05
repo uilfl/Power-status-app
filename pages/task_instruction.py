@@ -386,7 +386,7 @@ elif st.session_state.experiment_step == "post_experiment":
             )
         )
         conn.commit()
-        st.success("User ID saved successfully!")
+        st.success("saved successfully! Thanks!")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
