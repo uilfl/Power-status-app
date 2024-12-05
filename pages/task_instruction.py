@@ -117,7 +117,24 @@ def start():
                 st.error("Invalid input. Please enter a valid case (01, 02, 03, 04).")
         else:
             st.warning("Please enter your experiment code before submitting.")
-  
+
+    # Show success message if available
+    if st.session_state.get("success_message"):
+        st.success(st.session_state["success_message"])
+
+    # Only show the checkbox and next button after a valid code is submitted
+    if st.session_state.get("role_assigned"):
+        # Add checkbox to confirm reading
+        confirmation = st.checkbox(
+            "I have read and understand the above.",
+            value=st.session_state.get("confirmation", False),
+        )
+
+        # Save checkbox state
+        st.session_state["confirmation"] = confirmation
+
+        # Add Next Page button to proceed
+        st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
     user_id = random.randint(1, 1000)
     st.write(f"User ID: {user_id}")
     if user_id:
@@ -167,24 +184,6 @@ def start():
         finally:
             cursor.close()
             conn.close()
-    # Show success message if available
-    if st.session_state.get("success_message"):
-        st.success(st.session_state["success_message"])
-
-    # Only show the checkbox and next button after a valid code is submitted
-    if st.session_state.get("role_assigned"):
-        # Add checkbox to confirm reading
-        confirmation = st.checkbox(
-            "I have read and understand the above.",
-            value=st.session_state.get("confirmation", False),
-        )
-
-        # Save checkbox state
-        st.session_state["confirmation"] = confirmation
-
-        # Add Next Page button to proceed
-        st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
-
 def step_1():
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
