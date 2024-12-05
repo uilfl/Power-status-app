@@ -106,6 +106,11 @@ def start():
     # Ensure custom_name is not empty
     if custom_name == "":
         st.error("Name cannot be empty.")
+        try:
+            custom_name = str(custom_name)  # Convert to integer
+        except ValueError:
+            st.error("Experiment code must be a valid integer.")
+            custom_response_int = None  # Prevent database insertion if invalid
 
     # Proceed to insert into the database if inputs are valid
     if custom_response_int is not None and custom_name != "":
