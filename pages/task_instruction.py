@@ -19,6 +19,7 @@ if "custom_name" not in st.session_state:
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
+user_id = random.randint(1, 1000)
 
 
 def survey_guidance():
@@ -61,6 +62,11 @@ def start():
     st.session_state.custom_name = st.text_input("Please enter your name:")
     # Text input for experiment code assigned as int 
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
+    
+    global custom_name 
+    global custom_response 
+    custom_name = st.session_state.custom_name
+    custom_response = st.session_state.custom_response
     # Check and display the type of the variables
     st.write(f"Type of custom_name: {type(st.session_state.custom_name)}")
     st.write(f"Type of custom_response: {type(st.session_state.custom_response)}")
@@ -68,7 +74,6 @@ def start():
     # Display the actual values for debugging
     st.write(f"Value of custom_name: {st.session_state.custom_name}")
     st.write(f"Value of custom_response: {st.session_state.custom_response}")
-    
     
     # Handle experiment code submission
     if st.button("Submit Response", type="primary"):
@@ -135,55 +140,6 @@ def start():
 
         # Add Next Page button to proceed
         st.button("Next Page", key="to_step1", on_click=lambda: st.session_state.update(experiment_step="step1"), type="primary")
-    user_id = random.randint(1, 1000)
-    st.write(f"User ID: {user_id}")
-    if user_id:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the user_id into the User_response table
-            cursor.execute(
-                "INSERT INTO User_Response (user_id) VALUES (?);",
-                (user_id,)
-            )
-            conn.commit()
-            st.success("User ID saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
-    # Initialize variables for insertion
-    custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
-    custom_response = st.session_state.custom_response.strip()
-     # Ensure no extra spaces
-    if custom_response.isdigit():
-        st.write(custom_response)
-    # Validate and convert custom_response
-    # Proceed to insert into the database if inputs are valid
-    if custom_response is not None and custom_name != "":
-        try:
-            conn = get_connection()  # Your database connection function
-            cursor = conn.cursor()
-
-            # Insert data into the database
-            cursor.execute(
-                """
-                INSERT INTO [User_response] (group_id, user_name)
-                VALUES (?, ?);
-                """,
-                (pyodbc.SQL_CONVERT_VARCHAR(custom_response), pyodbc.SQL_CONVERT_VARCHAR(custom_name))  # Pass validated and converted data
-            )
-            conn.commit()
-            st.success("Data inserted successfully!")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-        finally:
-            cursor.close()
-            conn.close()
 def step_1():
     """Step 1: Initial Decision"""
     st.title("Task Instructions")
@@ -219,44 +175,11 @@ def step_1():
         min_value=0, max_value=100, value=50, key="decision_slider"
     )
     end_time = time.time()
-    time_interval = end_time - start_time
+    global time_interval_response
+    time_interval_response = end_time - start_time
 
-    if numeric_value is not None:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the data into the User table
-            cursor.execute(
-                "INSERT INTO [User_Response] (response_answer) VALUES (?);",
-                (numeric_value,)
-            )
-            conn.commit()
-            
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-    if time_interval >0:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the time_interval into the User_response table
-            cursor.execute(
-                "INSERT INTO User_Response (Change_interval_time) VALUES (?);",
-                (time_interval,)
-            )
-            conn.commit()
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close() 
-
+    
+    
     def confirm_logic():
         st.session_state.participant_decision = numeric_value
 
@@ -273,7 +196,7 @@ def step_1():
 
     # 按鈕與邏輯綁定
     st.button("Confirm", key="confirm_button", on_click=confirm_logic, type="primary")
-
+    
        
 def step_2():
     """Step 2: System Guidance and Review"""
@@ -291,39 +214,12 @@ def step_2():
                 time.sleep(0.05)
         st.session_state.loading_complete = True  # 加载完成后更新状态
 
+    global participant_decision
+    global robot_decision
     participant_decision = st.session_state.participant_decision
     robot_decision = st.session_state.robot_decision
 
-    
-    # insert data to database, robot and user response
-    if 'participant_decision' in st.session_state and 'robot_decision' in st.session_state:
-        if st.session_state.participant_decision is not None and st.session_state.robot_decision is not None:
-            try:
-                conn = get_connection()
-                cursor = conn.cursor()
 
-                # Insert participant decision into User_response table
-                cursor.execute(
-                    "INSERT INTO User_Response (response_answer) VALUES (?);",
-                    (st.session_state.participant_decision,)
-                )
-                conn.commit()
-                # st.success("Participant decision saved successfully!")
-
-                # Insert robot decision into Robot table
-                cursor.execute(
-                    "INSERT INTO User_Response (robot_answer) VALUES (?);",
-                    (st.session_state.robot_decision,)
-                )
-                conn.commit()
-                # st.success("Robot decision saved successfully!")
-
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-
-            finally:
-                cursor.close()
-                conn.close()
     # Determine roles and images based on custom_response
     if st.session_state.custom_response == "01":
         participant_status = "Creative Worker"
@@ -381,62 +277,28 @@ def step_2():
     st.info("You can adjust the final answer, or not adjust it at all! But you will eventually see each other's average answers.")
     
     start_time = time.time()
+    global final_value
     final_value = st.slider(
         label="Your decision for online advertising:",
         min_value=0, max_value=100, value=participant_decision, key="final_slider"
     )
     end_time = time.time()
-    time_interval = end_time - start_time
+    global time_interval_change
+    time_interval_change = end_time - start_time
     # check whether the user change the answer
-    answer_change = 0
+    global answer_change 
     if final_value == participant_decision:
         answer_change = 0
     else:
         answer_change = 1
-
-    if answer_change:  # Fix the condition syntax
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the answer change into the User_response table
-            cursor.execute(
-                "INSERT INTO User_Response (changed_answer) VALUES (?);",
-                (answer_change,)  # Use 1 to indicate True in the database
-            )
-            conn.commit()
-            st.success("Answer change saved successfully!")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-    # calculate the time interval on change the slider
-    if time_interval >0:
-        try:
-            conn = get_connection()
-            cursor = conn.cursor()
-
-            # Insert the time_interval into the User_response table
-            cursor.execute(
-                "INSERT INTO User_Response (Change_interval_time) VALUES (?);",
-                (time_interval,)
-            )
-            conn.commit()
-            # st.success("Time interval saved successfully!")
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-        finally:
-            cursor.close()
-            conn.close()
+    
 
     # Submit button with unique key
     if st.button("Submit Final Decision", key="questionnaire", on_click=lambda: st.session_state.update(experiment_step="questionnaire"), type="primary"):
         st.session_state.final_online = final_value
         st.session_state.final_offline = 100 - final_value
 
+    
 
 def questionnaire():
     """Questionnaire Page"""
@@ -478,3 +340,27 @@ elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
+
+
+if user_id:
+       try:
+           conn = get_connection()
+           cursor = conn.cursor()
+
+
+           # Insert the user_id into the User_response table
+           cursor.execute(
+               "INSERT INTO User_Response (user_id, user_name, group_id, response_answer, response_time, robot_answer, change, changed_answer, change_interval_time) VALUES (?);",
+               (user_id,custom_name,custom_response,participant_decision,time_interval_response,robot_decision,answer_change,final_value,time_interval_change)
+           )
+           conn.commit()
+           st.success("User ID saved successfully!")
+
+
+       except Exception as e:
+           st.error(f"An error occurred: {e}")
+
+
+       finally:
+           cursor.close()
+           conn.close()
