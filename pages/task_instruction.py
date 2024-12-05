@@ -350,7 +350,7 @@ elif st.session_state.experiment_step == "questionnaire":
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
-    user_id = random.randint(1, 1000)
+    #user_id = random.randint(1, 1000)
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -363,7 +363,7 @@ elif st.session_state.experiment_step == "post_experiment":
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
             (
-                user_id,                   # INT
+                ,                   # INT
                 st.session_state.user_name,                      # VARCHAR(MAX)
                 st.session_state.group_ID,           # VARCHAR(50)
                 st.session_state.participant_decision,
