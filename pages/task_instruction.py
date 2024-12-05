@@ -18,28 +18,6 @@ if "custom_name" not in st.session_state:
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
-user_id = random.randint(1, 1000)
-print(user_id)
-if user_id:
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        # Insert the user_id into the User_response table
-        cursor.execute(
-            "INSERT INTO User_Response (user_id) VALUES (?);",
-            (user_id,)
-        )
-        conn.commit()
-        st.success("User ID saved successfully!")
-
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-
-    finally:
-        cursor.close()
-        conn.close()
-
 
 
 def survey_guidance():
@@ -90,6 +68,27 @@ def start():
     st.write(f"Value of custom_name: {st.session_state.custom_name}")
     st.write(f"Value of custom_response: {st.session_state.custom_response}")
     
+    user_id = random.randint(1, 1000)
+    print(user_id)
+    if user_id:
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            # Insert the user_id into the User_response table
+            cursor.execute(
+                "INSERT INTO User_Response (user_id) VALUES (?);",
+                (user_id,)
+            )
+            conn.commit()
+            st.success("User ID saved successfully!")
+
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            conn.close()
     # Initialize variables for insertion
     custom_name = st.session_state.custom_name.strip()  # Ensure no extra spaces
     custom_response = st.session_state.custom_response.strip()  # Ensure no extra spaces
