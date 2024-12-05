@@ -364,7 +364,7 @@ elif st.session_state.experiment_step == "post_experiment":
             """,
             (
                 user_id,                   # INT
-                name,                      # VARCHAR(MAX)
+                user_name,                      # VARCHAR(MAX)
                 custom_response,           # VARCHAR(50)
                 participant_answer,
                 time_interval_response,       # VARCHAR(50)    # INT
