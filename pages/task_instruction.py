@@ -70,7 +70,7 @@ def start():
     st.write(f"Value of custom_response: {st.session_state.custom_response}")
     
     user_id = random.randint(1, 1000)
-    print(user_id)
+    st.write(f"User ID: {user_id}")
     if user_id:
         try:
             conn = get_connection()
@@ -109,7 +109,7 @@ def start():
                 INSERT INTO [User_response] (group_id, user_name)
                 VALUES (?, ?);
                 """,
-                (pyodbc.SQL_CONVERT_INTEGER(custom_response), pyodbc.SQL_CONVERT_VARCHAR(custom_name))  # Pass validated and converted data
+                (pyodbc.SQL_CONVERT_VARCHAR(custom_response), pyodbc.SQL_CONVERT_VARCHAR(custom_name))  # Pass validated and converted data
             )
             conn.commit()
             st.success("Data inserted successfully!")
