@@ -19,6 +19,8 @@ if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
 
 user_id = random.randint(1, 1000)
+global custom_name_name 
+global participant_answer
 
 
 def survey_guidance():
@@ -57,7 +59,7 @@ def start():
         If you have any questions during the study, please raise your hand to notify the experimenter.
         """
     )
-    global custom_name_name 
+    
     global custom_response 
     
      # Text input for experiment name
@@ -66,15 +68,6 @@ def start():
     st.session_state.custom_response = st.text_input("Please enter your experiment code:")
     custom_name_name = st.session_state.custom_name.strip()
     custom_response = st.session_state.custom_response
-    
-    
-    # Check and display the type of the variables
-    st.write(f"Type of custom_name: {type(st.session_state.custom_name)}")
-    st.write(f"Type of custom_response: {type(st.session_state.custom_response)}")
-
-    # Display the actual values for debugging
-    st.write(f"Value of custom_name: {st.session_state.custom_name}")
-    st.write(f"Value of custom_response: {st.session_state.custom_response}")
     
     # Handle experiment code submission
     if st.button("Submit Response", type="primary"):
