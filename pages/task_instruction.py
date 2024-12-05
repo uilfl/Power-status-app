@@ -344,35 +344,35 @@ elif st.session_state.experiment_step == "questionnaire":
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
     user_id = random.randint(1, 1000)
-try:
-    conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
 
-        # Insert all columns into the User_Response table
-    cursor.execute(
-        """
-        INSERT INTO User_Response 
-        (user_id, user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-        """,
-        (
-            user_id,                   # INT
-            name,               # VARCHAR(MAX)
-            custom_response,           # VARCHAR(50)
-            participant_answer,      # VARCHAR(50)
-            time_interval_response,    # INT
-            robot_decision,            # INT
-            answer_change,             # INT
-            final_value,               # INT
-            time_interval_change       # CHAR(50)
+            # Insert all columns into the User_Response table
+        cursor.execute(
+            """
+            INSERT INTO User_Response 
+            (user_id, user_name, group_id, response_answer, response_time, robot_answer, Change, Changed_answer, Change_interval_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """,
+            (
+                user_id,                   # INT
+                name,               # VARCHAR(MAX)
+                custom_response,           # VARCHAR(50)
+                participant_answer,      # VARCHAR(50)
+                time_interval_response,    # INT
+                robot_decision,            # INT
+                answer_change,             # INT
+                final_value,               # INT
+                time_interval_change       # CHAR(50)
+            )
         )
-    )
-    conn.commit()
-    st.success("User ID saved successfully!")
+        conn.commit()
+        st.success("User ID saved successfully!")
 
-except Exception as e:
-    st.error(f"An error occurred: {e}")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
-finally:
-    cursor.close()
-    conn.close()
+    finally:
+        cursor.close()
+        conn.close()
