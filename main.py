@@ -11,9 +11,6 @@ if "current_page" not in st.session_state:
 if st.session_state["current_page"] == "hello":
     from Hello import main as hello_page
     hello_page()
-elif st.session_state["current_page"] == "start":
-    from test_files.start import main as start_page
-    start_page()
 elif st.session_state["current_page"] == "task_instruction":
     from pages.task_instruction import task_instruction as task_instruction_page
     task_instruction_page()
