@@ -365,7 +365,7 @@ elif st.session_state.experiment_step == "post_experiment":
             (
                 user_id,                   # INT
                 st.session_state.user_name,                      # VARCHAR(MAX)
-                st.session_state.custom_response,           # VARCHAR(50)
+                st.session_state.group_id,           # VARCHAR(50)
                 st.session_state.participant_answer,
                 st.session_state.time_interval_response,       # VARCHAR(50)    # INT
                 st.session_state.robot_decision,            # INT
