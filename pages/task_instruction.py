@@ -21,6 +21,7 @@ if "custom_response" not in st.session_state:
 user_id = random.randint(1, 1000)
 name =''
 participant_answer = 0
+custom_response = '01'
 
 
 def survey_guidance():
@@ -60,7 +61,7 @@ def start():
         """
     )
     
-    global custom_response 
+
     name = st.session_state.custom_name
      # Text input for experiment name
     st.session_state.custom_name = st.text_input("Please enter your name:")
