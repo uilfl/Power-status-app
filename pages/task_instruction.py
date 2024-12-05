@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import random
 from utils.initialized_database import get_connection 
 
 # Set page configuration as the first Streamlit command
@@ -16,6 +17,27 @@ if "custom_name" not in st.session_state:
     st.session_state.custom_name = None
 if "custom_response" not in st.session_state:
     st.session_state.custom_response = None
+
+user_id = random.randint(1, 1000)
+if user_id:
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Insert the user_id into the User_response table
+        cursor.execute(
+            "INSERT INTO User_Response (user_id) VALUES (?);",
+            (user_id,)
+        )
+        conn.commit()
+        st.success("User ID saved successfully!")
+
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
+    finally:
+        cursor.close()
+        conn.close()
 
 
 
