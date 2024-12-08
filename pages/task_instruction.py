@@ -337,16 +337,7 @@ def post_experiment_page():
     \n Thank you again for your participation! Do you have any questions?
     """)
 
-# Main Navigation
-if st.session_state.experiment_step == "guide":
-    survey_guidance()
-elif st.session_state.experiment_step == "start":
-    start()
-elif st.session_state.experiment_step == "step1":
-    step_1()
-elif st.session_state.experiment_step == "step2":
-    step_2()
-    # user_id = random.randint(1, 1000)
+def sql_function():
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -379,7 +370,19 @@ elif st.session_state.experiment_step == "step2":
     finally:
         cursor.close()
         conn.close()
+
+# Main Navigation
+if st.session_state.experiment_step == "guide":
+    survey_guidance()
+elif st.session_state.experiment_step == "start":
+    start()
+elif st.session_state.experiment_step == "step1":
+    step_1()
+elif st.session_state.experiment_step == "step2":
+    step_2()
+    # user_id = random.randint(1, 1000)
 elif st.session_state.experiment_step == "questionnaire":
+    sql_function()
     questionnaire()
 elif st.session_state.experiment_step == "post_experiment":
     post_experiment_page()
