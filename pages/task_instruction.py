@@ -346,11 +346,7 @@ elif st.session_state.experiment_step == "step1":
     step_1()
 elif st.session_state.experiment_step == "step2":
     step_2()
-elif st.session_state.experiment_step == "questionnaire":
-    questionnaire()
-elif st.session_state.experiment_step == "post_experiment":
-    post_experiment_page()
-    user_id = random.randint(1, 1000)
+    # user_id = random.randint(1, 1000)
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -364,14 +360,14 @@ elif st.session_state.experiment_step == "post_experiment":
             """,
             (
                 # user_id,                   # INT
-                st.session_state.user_name,                      # VARCHAR(MAX)
-                st.session_state.group_ID,           # VARCHAR(50)
-                st.session_state.participant_decision,
-                st.session_state.time_interval_response,       # VARCHAR(50)    # INT
-                st.session_state.robot_decision,            # INT
-                st.session_state.answer_change,             # INT
-                st.session_state.participant_final_decision,               # INT
-                st.session_state.time_interval_change,       # CHAR(50)
+                st.session_state.user_name,# VARCHAR(MAX)
+                st.session_state.group_ID,# VARCHAR(50)
+                st.session_state.participant_decision,# INT
+                st.session_state.time_interval_response,# VARCHAR(50)
+                st.session_state.robot_decision,# INT
+                st.session_state.answer_change,# INT
+                st.session_state.participant_final_decision,# INT
+                st.session_state.time_interval_change,# CHAR(50)
             )
         )
         conn.commit()
@@ -383,3 +379,8 @@ elif st.session_state.experiment_step == "post_experiment":
     finally:
         cursor.close()
         conn.close()
+elif st.session_state.experiment_step == "questionnaire":
+    questionnaire()
+elif st.session_state.experiment_step == "post_experiment":
+    post_experiment_page()
+    
